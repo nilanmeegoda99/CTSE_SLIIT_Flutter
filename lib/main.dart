@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sliit_info_ctse/screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,11 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'SLIIT INFO PORTAL',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const Login_Screen(),
     );
   }
 }
