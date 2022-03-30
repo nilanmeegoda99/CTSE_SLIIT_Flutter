@@ -1,4 +1,11 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sliit_info_ctse/model/user_model.dart';
+
+
 class SignUp_Screen extends StatefulWidget {
   const SignUp_Screen({Key? key}) : super(key: key);
 
@@ -7,6 +14,9 @@ class SignUp_Screen extends StatefulWidget {
 }
 
 class _SignUp_ScreenState extends State<SignUp_Screen> {
+
+  //firebase authentication and firestore
+  final fAuth = FirebaseAuth.instance;
 
   //account types
   final accTypes = ['Lecturer','Student'];
@@ -39,7 +49,17 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       autofocus: false,
       controller: f_name_editing_cntrlr,
       keyboardType: TextInputType.text,
-
+      //field validation
+      validator: (val){
+        RegExp regex = new RegExp(r'^.{3,}$');
+        if(val!.isEmpty){
+          return ("field cannot be empty");
+        }
+        if(!regex.hasMatch(val)){
+          return ("minimum length is 3 characters");
+        }
+        return null;
+      },
       onSaved: (val){
         f_name_editing_cntrlr.text = val!;
       },
@@ -59,7 +79,13 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       autofocus: false,
       controller: l_name_editing_cntrlr,
       keyboardType: TextInputType.text,
-
+      //field validation
+      validator: (val){
+        if(val!.isEmpty){
+          return ("field cannot be empty");
+        }
+        return null;
+      },
       onSaved: (val){
         l_name_editing_cntrlr.text = val!;
       },
@@ -94,7 +120,16 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       autofocus: false,
       controller: email_editing_cntrlr,
       keyboardType: TextInputType.emailAddress,
-
+      //email field validation
+      validator: (val){
+        if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val!)){
+          return ("Please enter a valid username");
+        }
+        if (val.isEmpty){
+          return ("Please enter your username");
+        }
+        return null;
+      },
       onSaved: (val){
         email_editing_cntrlr.text = val!;
       },
@@ -114,7 +149,17 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       autofocus: false,
       controller: pwd_editing_cntrlr,
       obscureText: true,
-
+      //field validation
+      validator: (val){
+        RegExp regex = new RegExp(r'^.{6,}$');
+        if(val!.isEmpty){
+          return ("field cannot be empty");
+        }
+        if(!regex.hasMatch(val)){
+          return ("minimum length is 6 characters");
+        }
+        return null;
+      },
       onSaved: (val){
         pwd_editing_cntrlr.text = val!;
       },
@@ -134,7 +179,14 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       autofocus: false,
       controller: confirm_pwd_editing_cntrlr,
       obscureText: true,
+      //field validation
+      validator: (val){
 
+        if(confirm_pwd_editing_cntrlr.text != pwd_editing_cntrlr.text){
+          return ("passwords do not match");
+        }
+        return null;
+      },
       onSaved: (val){
         confirm_pwd_editing_cntrlr.text = val!;
       },
@@ -157,7 +209,9 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
             color: Colors.orange,
             child: MaterialButton(
                 padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                onPressed: () {  },
+                onPressed: () {
+                  register(email_editing_cntrlr.text, pwd_editing_cntrlr.text);
+                },
                 minWidth: MediaQuery.of(context).size.width,
                 child:const Text("Register", textAlign: TextAlign.center,style: TextStyle(
                     fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
@@ -215,6 +269,38 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
           ),
         )
     );
+  }
+
+  //functions
+  void register(String email, String password)async{
+    if(_signup_formKey.currentState!.validate()){
+        await fAuth.createUserWithEmailAndPassword(email: email, password: password).then((value) =>
+        {
+        saveDatatoFirestore()
+        }
+        ).catchError((err){
+          Fluttertoast.showToast(msg: err!.message);
+        });
+    }
+  }
+
+  saveDatatoFirestore() async{
+    //initializinn firestore
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = fAuth.currentUser;
+
+    user_model userModel = user_model();
+
+    //maping the values
+    userModel.uid = user!.uid;
+    userModel.email = user.email;
+    userModel.f_name = f_name_editing_cntrlr.text;
+    userModel.l_name = l_name_editing_cntrlr.text;
+    userModel.acc_type = accType;
+    
+    await firebaseFirestore.collection("users").doc(user.uid).set(userModel.toMap());
+    Fluttertoast.showToast(msg: "Profile created successfully");
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
 }
 

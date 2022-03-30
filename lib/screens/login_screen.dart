@@ -1,6 +1,7 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sliit_info_ctse/screens/home_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/screens/signup_screen.dart';
 
 class Login_Screen extends StatefulWidget {
@@ -11,6 +12,9 @@ class Login_Screen extends StatefulWidget {
 }
 
 class _Login_ScreenState extends State<Login_Screen> {
+
+  //firebase
+  final fauth = FirebaseAuth.instance;
 
   //text editing controllers
   final TextEditingController username_controller = TextEditingController();
@@ -29,7 +33,16 @@ class _Login_ScreenState extends State<Login_Screen> {
       autofocus: false,
       controller: username_controller,
       keyboardType: TextInputType.emailAddress,
-
+      //email field validation
+      validator: (val){
+        if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val!)){
+          return ("Please enter a valid username");
+        }
+        if (val.isEmpty){
+          return ("Please enter your username");
+        }
+        return null;
+      },
       onSaved: (val){
         username_controller.text = val!;
       },
@@ -49,8 +62,17 @@ class _Login_ScreenState extends State<Login_Screen> {
       autofocus: false,
       controller: pwd_controller,
       obscureText: true,
-      keyboardType: TextInputType.text ,
-
+      //password field validation
+      validator: (val){
+        RegExp regex = new RegExp(r'^.{6,}$');
+        if(val!.isEmpty){
+          return ("Password is required");
+        }
+        if(!regex.hasMatch(val)){
+          return("Password should have min length of 6 characters");
+        }
+        return null;
+      },
       onSaved: (val){
         pwd_controller.text = val!;
       },
@@ -73,13 +95,30 @@ class _Login_ScreenState extends State<Login_Screen> {
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          signIn(username_controller.text, pwd_controller.text);
         },
         minWidth: MediaQuery.of(context).size.width,
         child:const Text("Sign In", textAlign: TextAlign.center,style: TextStyle(
           fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
         ),)
       )
+    );
+
+    //guest view button
+    final guestViewBtn = Material(
+        elevation : 5,
+        borderRadius: BorderRadius.circular(25),
+        color: Colors.orange,
+        child: MaterialButton(
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            onPressed: () {
+              Navigator.pushNamed(context, '/userprofile');
+            },
+            minWidth: MediaQuery.of(context).size.width,
+            child:const Text("Guest View", textAlign: TextAlign.center,style: TextStyle(
+                fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
+            ),)
+        )
     );
 
     //signup_navigation
@@ -105,6 +144,8 @@ class _Login_ScreenState extends State<Login_Screen> {
                     const SizedBox(height: 20),
                     pwd_field,
                     const SizedBox(height: 40),
+                    guestViewBtn,
+                    const SizedBox(height: 20),
                     signInBtn,
                     const SizedBox(height: 20),
 
@@ -145,4 +186,20 @@ class _Login_ScreenState extends State<Login_Screen> {
       )
     );
   }
+
+  //functions
+
+  //signin function
+void signIn(String email, String password) async{
+    if(formKey.currentState!.validate()){
+      await fauth.signInWithEmailAndPassword(email: email, password: password).then(
+          (uid) => {
+            Fluttertoast.showToast(msg: "SignIn Successful"),
+            Navigator.pushReplacementNamed(context, '/home')
+          }
+      ).catchError((err){
+        Fluttertoast.showToast(msg: "Please try again!");
+      });
+    }
+}
 }

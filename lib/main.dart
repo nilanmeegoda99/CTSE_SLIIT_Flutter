@@ -1,7 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sliit_info_ctse/screens/home_screen.dart';
 import 'package:sliit_info_ctse/screens/login_screen.dart';
+import 'package:sliit_info_ctse/screens/signup_screen.dart';
+import 'package:sliit_info_ctse/screens/userProfile.dart';
 
-void main() {
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -17,7 +24,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: const Login_Screen(),
+     initialRoute: '/',
+      routes: {
+        '/': (context) => const Login_Screen(),
+        '/signup': (context) => const SignUp_Screen(),
+        '/home': (context) => const HomeScreen(),
+        '/userprofile': (context) => const userProfile(),
+      },
     );
   }
 }
