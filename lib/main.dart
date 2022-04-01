@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sliit_info_ctse/screens/edit_prodile.dart';
 import 'package:sliit_info_ctse/screens/home_screen.dart';
 import 'package:sliit_info_ctse/screens/login_screen.dart';
 import 'package:sliit_info_ctse/screens/signup_screen.dart';
 import 'package:sliit_info_ctse/screens/userProfile.dart';
+
 
 
 Future<void> main() async {
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const Login_Screen(),
         '/signup': (context) => const SignUp_Screen(),
         '/home': (context) => const HomeScreen(),
-        '/userprofile': (context) => const userProfile(),
+        '/userprofile': (context) => ProfilePage(),
+        '/edit_profile' : (context) => EditProfilePage(),
       },
     );
   }

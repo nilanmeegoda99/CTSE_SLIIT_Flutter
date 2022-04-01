@@ -112,7 +112,7 @@ class _Login_ScreenState extends State<Login_Screen> {
         child: MaterialButton(
             padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
             onPressed: () {
-              Navigator.pushNamed(context, '/userprofile');
+              Navigator.pushNamed(context, '/home');
             },
             minWidth: MediaQuery.of(context).size.width,
             child:const Text("Guest View", textAlign: TextAlign.center,style: TextStyle(
@@ -198,7 +198,7 @@ void signIn(String email, String password) async{
             Navigator.pushReplacementNamed(context, '/home')
           }
       ).catchError((err){
-        Fluttertoast.showToast(msg: "Please try again!");
+        Fluttertoast.showToast(msg: err!.message);
       });
     }
 }

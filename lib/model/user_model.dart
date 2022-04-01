@@ -6,6 +6,7 @@ class user_model {
   String? f_name;
   String? l_name;
   String? acc_type;
+  String? imagePath;
 
 
   user_model({
@@ -14,6 +15,7 @@ class user_model {
      this.f_name,
     this.l_name,
      this.acc_type,
+    this.imagePath,
 
   });
 
@@ -25,6 +27,7 @@ class user_model {
       f_name: map['f_name'],
       l_name: map['l_name'],
       acc_type: map['acc_type'],
+      imagePath: map['imagePath'],
     );
   }
 
@@ -36,6 +39,7 @@ class user_model {
         'f_name': f_name,
         'l_name': l_name,
         'acc_type': acc_type,
+        'imagePath': imagePath,
       };
   }
 }

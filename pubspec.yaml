@@ -21,6 +21,7 @@ dependencies:
   firebase_auth: ^3.3.11
   firebase_core: ^1.13.1
   fluttertoast: ^8.0.9
+  font_awesome_flutter: ^10.1.0
 
 dev_dependencies:
   flutter_test:
