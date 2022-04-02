@@ -1,3 +1,4 @@
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,7 @@ import "package:flutter/material.dart";
 
 
 import '../model/user_model.dart';
+import '../services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,6 +21,22 @@ class _HomeScreenState extends State<HomeScreen> {
  int _selectedPage = 0;
  PageController pageController = PageController();
 
+ //authservice
+ final AuthService _auth = AuthService();
+ user_model currentUser = user_model();
+
+ @override
+ void initState() {
+   // init state
+   super.initState();
+   FirebaseFirestore.instance.collection("users").doc(_auth.currentUser!.uid).get().then(
+           (val){
+         setState(() {
+           currentUser = user_model.fromMap(val.data());
+         });
+       }
+   );
+ }
 
  List<_Photo> _photos(BuildContext context) {
 
@@ -67,23 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
      ),
    ];
  }
-  // //firebase user authneication state
-  // User? user = FirebaseAuth.instance.currentUser;
-  // user_model currentUser = user_model();
-  //
-  // @override
-  // void initState() {
-  //
-  //   super.initState();
-  //   FirebaseFirestore.instance.collection("users").doc(user!.uid).get().then(
-  //       (val){
-  //         this.currentUser = user_model.fromMap(val.data());
-  //         setState(() {
-  //
-  //         });
-  //       }
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.logout_rounded, color:Colors.orange, size: 35,),
             onPressed: (){
-              signout(context);
+              _auth.signOut();
+              Navigator.pushReplacementNamed(context, '/');
             },
             padding: const EdgeInsets.only(right: 10),
           ),
@@ -137,22 +139,25 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
 
       ),
-      bottomNavigationBar: BottomNavigationBar(items: const<BottomNavigationBarItem>[
+      floatingActionButton: currentUser.acc_type == 'Admin' ? FloatingActionButton(
+        onPressed: () {
+          print(currentUser.acc_type);
+          Navigator.pushNamed(context, '/add_event');
+          // Add your onPressed code here!
+        },
+        backgroundColor: const Color(0xff002F66),
+        child: const Icon(Icons.add, color: Colors.white,),
+      ) : null,
+      bottomNavigationBar: BottomNavigationBar(items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.graduationCap), label:'Faculties'),
         BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.calendarDays), label:'Events'),
         BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.newspaper), label:'News'),
-        
+        BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.newspaper), label:'Staff'),
       ],
       currentIndex: _selectedPage,
       onTap: onTapped,),
     );
   }
-
-  //signout function
-Future<void> signout(BuildContext context) async{
-    await FirebaseAuth.instance.signOut();
-    Navigator.pushReplacementNamed(context, '/');
-}
 
 void onTapped(int index){
     setState(() {

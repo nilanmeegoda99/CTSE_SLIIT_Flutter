@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sliit_info_ctse/model/user_model.dart';
+import 'package:sliit_info_ctse/model/degree_model.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class add_Degree_screen extends StatefulWidget {
   const add_Degree_screen({Key? key}) : super(key: key);
@@ -13,24 +13,21 @@ class add_Degree_screen extends StatefulWidget {
 
 class _add_Degree_screenState extends State<add_Degree_screen> {
 
-  //firebase authentication and firestore
-  final fAuth = FirebaseAuth.instance;
 
   //account types
-  final accTypes = ['Lecturer','Student'];
+  final faculties = ['Computing','Engineering', 'Business', 'Humanties & SCI', 'Postgraduate', 'Architecture', 'Hospitality'];
 
   //text editor controllers
-  final f_name_editing_cntrlr = new TextEditingController();
-  final l_name_editing_cntrlr = new TextEditingController();
-  final email_editing_cntrlr = new TextEditingController();
-  final pwd_editing_cntrlr = new TextEditingController();
-  final confirm_pwd_editing_cntrlr = new TextEditingController();
+  final deg_name_editing_cntrlr = new TextEditingController();
+  final entry_req_editing_cntrlr = new TextEditingController();
+  final duration_editing_cntrlr = new TextEditingController();
+  final desc_editing_cntrlr = new TextEditingController();
 
-  //account type
-  String? accType;
+  //faculty type
+  String? faculty;
 
   //signup form key
-  final _signup_formKey = GlobalKey<FormState>();
+  final _degree_formKey = GlobalKey<FormState>();
 
   //menu item
   DropdownMenuItem<String> buildMenuItem(String item) =>
@@ -42,10 +39,10 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
   @override
   Widget build(BuildContext context) {
 
-    //firstname field
-    final fNameField = TextFormField(
+    //Degree title field
+    final degree_titlt_Field = TextFormField(
       autofocus: false,
-      controller: f_name_editing_cntrlr,
+      controller: deg_name_editing_cntrlr,
       keyboardType: TextInputType.text,
       //field validation
       validator: (val){
@@ -59,24 +56,29 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
         return null;
       },
       onSaved: (val){
-        f_name_editing_cntrlr.text = val!;
+        deg_name_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.account_circle),
+          prefixIcon: const Padding(
+            padding: EdgeInsets.all(9.0),
+            child: FaIcon(FontAwesomeIcons.graduationCap),
+          ),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "First name",
+          hintText: "Degree Titile",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           )
       ),
     );
 
-    //lastname field
-    final lNameField = TextFormField(
+    //entry requirement field
+    final entry_req_field = TextFormField(
       autofocus: false,
-      controller: l_name_editing_cntrlr,
-      keyboardType: TextInputType.text,
+      controller: entry_req_editing_cntrlr,
+      minLines: 1,
+      maxLines: 5,
+      keyboardType: TextInputType.multiline,
       //field validation
       validator: (val){
         if(val!.isEmpty){
@@ -85,68 +87,71 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
         return null;
       },
       onSaved: (val){
-        l_name_editing_cntrlr.text = val!;
+        entry_req_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          prefixIcon: const Icon(Icons.account_circle),
+          prefixIcon: const Padding(
+            padding: EdgeInsets.all(9.0),
+            child: FaIcon(FontAwesomeIcons.certificate),
+          ),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Last name",
+          hintText: "Entry Requirements",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           )
       ),
     );
 
-    //account type field
-    final accTypeField = Container(
+    //Faculty field
+    final faculty_TypeField = Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 0.8),
       ),
       padding: const EdgeInsets.fromLTRB(20, 1, 20, 1),
       child: DropdownButtonFormField<String>(
-        value: accType,
+        value: faculty,
         isExpanded: true,
-        items: accTypes.map(buildMenuItem).toList(),
-        onChanged: (value) => setState(()=> this.accType = value),
+        items: faculties.map(buildMenuItem).toList(),
+        onChanged: (value) => setState(()=> this.faculty = value),
       ),
     );
 
-    //username field
-    final username_field = TextFormField(
+    //duration field
+    final duration_field = TextFormField(
       autofocus: false,
-      controller: email_editing_cntrlr,
-      keyboardType: TextInputType.emailAddress,
-      //email field validation
+      controller: duration_editing_cntrlr,
+      keyboardType: TextInputType.text,
+      //duration field validation
       validator: (val){
-        if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val!)){
-          return ("Please enter a valid username");
-        }
-        if (val.isEmpty){
-          return ("Please enter your username");
+        if (val!.isEmpty){
+          return ("field cannot be empty");
         }
         return null;
       },
       onSaved: (val){
-        email_editing_cntrlr.text = val!;
+        duration_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail),
+          prefixIcon: const Padding(
+            padding: EdgeInsets.all(9.0),
+            child: FaIcon(FontAwesomeIcons.clock),
+          ),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Email address",
+          hintText: "Duration",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           )
       ),
     );
 
-    //password field
-    final pwd_field = TextFormField(
+    //description field
+    final description_field = TextFormField(
       autofocus: false,
-      controller: pwd_editing_cntrlr,
-      obscureText: true,
+      controller: desc_editing_cntrlr,
+      keyboardType: TextInputType.multiline,
       //field validation
       validator: (val){
         RegExp regex = new RegExp(r'^.{6,}$');
@@ -159,40 +164,16 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
         return null;
       },
       onSaved: (val){
-        pwd_editing_cntrlr.text = val!;
+        desc_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          prefixIcon: Icon(Icons.lock),
+          prefixIcon: const Padding(
+            padding: EdgeInsets.all(9.0),
+            child: FaIcon(FontAwesomeIcons.pen),
+          ),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Password",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          )
-      ),
-    );
-
-    //re-enter password field
-    final confirm_pwd_field = TextFormField(
-      autofocus: false,
-      controller: confirm_pwd_editing_cntrlr,
-      obscureText: true,
-      //field validation
-      validator: (val){
-
-        if(confirm_pwd_editing_cntrlr.text != pwd_editing_cntrlr.text){
-          return ("passwords do not match");
-        }
-        return null;
-      },
-      onSaved: (val){
-        confirm_pwd_editing_cntrlr.text = val!;
-      },
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-          prefixIcon: Icon(Icons.lock),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Confirm Password",
+          hintText: "Description",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           )
@@ -200,18 +181,18 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
     );
 
 
-    //signup button
-    final signUpBtn = Material(
+    //submit button
+    final submitBtn = Material(
         elevation : 5,
         borderRadius: BorderRadius.circular(25),
         color: Colors.orange,
         child: MaterialButton(
             padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
             onPressed: () {
-              register(email_editing_cntrlr.text, pwd_editing_cntrlr.text);
+              submitData();
             },
             minWidth: MediaQuery.of(context).size.width,
-            child:const Text("Register", textAlign: TextAlign.center,style: TextStyle(
+            child:const Text("Submit", textAlign: TextAlign.center,style: TextStyle(
                 fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
             ),)
         )
@@ -237,26 +218,24 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
                   child: Padding(
                     padding: const EdgeInsets.all(25.0),
                     child: Form(
-                        key: _signup_formKey,
+                        key: _degree_formKey,
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
 
                               const SizedBox(height: 50),
-                              fNameField,
+                              degree_titlt_Field,
                               const SizedBox(height: 20),
-                              lNameField,
+                              entry_req_field,
                               const SizedBox(height: 20),
-                              accTypeField,
+                              faculty_TypeField,
                               const SizedBox(height: 20),
-                              username_field,
+                              duration_field,
                               const SizedBox(height: 20),
-                              pwd_field,
-                              const SizedBox(height: 20),
-                              confirm_pwd_field,
+                              description_field,
                               const SizedBox(height: 40),
-                              signUpBtn,
+                              submitBtn,
 
                             ]
                         )
@@ -270,34 +249,27 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
   }
 
   //functions
-  void register(String email, String password)async{
-    if(_signup_formKey.currentState!.validate()){
-      await fAuth.createUserWithEmailAndPassword(email: email, password: password).then((value) =>
-      {
-        saveDatatoFirestore()
-      }
-      ).catchError((err){
-        Fluttertoast.showToast(msg: err!.message);
-      });
+  void submitData()async{
+    if(_degree_formKey.currentState!.validate()){
+        saveDatatoFirestore();
     }
   }
 
   saveDatatoFirestore() async{
     //initializinn firestore
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = fAuth.currentUser;
 
-    user_model userModel = user_model();
+    degree_model degreeModel = degree_model();
 
     //maping the values
-    userModel.uid = user!.uid;
-    userModel.email = user.email;
-    userModel.f_name = f_name_editing_cntrlr.text;
-    userModel.l_name = l_name_editing_cntrlr.text;
-    userModel.acc_type = accType;
+    degreeModel.name = deg_name_editing_cntrlr.text;
+    degreeModel.entry_req = entry_req_editing_cntrlr.text;
+    degreeModel.duration = duration_editing_cntrlr.text;
+    degreeModel.description = desc_editing_cntrlr.text;
+    degreeModel.faculty = faculty;
 
-    await firebaseFirestore.collection("users").doc(user.uid).set(userModel.toMap());
-    Fluttertoast.showToast(msg: "Profile created successfully");
+    await firebaseFirestore.collection('degrees').doc().set(degreeModel.toMap());
+    Fluttertoast.showToast(msg: "Data added successfully");
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
 }

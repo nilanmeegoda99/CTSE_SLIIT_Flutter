@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/model/user_model.dart';
+import 'package:sliit_info_ctse/services/auth_service.dart';
 
 
 class SignUp_Screen extends StatefulWidget {
@@ -15,8 +16,8 @@ class SignUp_Screen extends StatefulWidget {
 
 class _SignUp_ScreenState extends State<SignUp_Screen> {
 
-  //firebase authentication and firestore
-  final fAuth = FirebaseAuth.instance;
+  //authservice
+  final AuthService _auth = AuthService();
 
   //account types
   final accTypes = ['Lecturer','Student'];
@@ -209,8 +210,17 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
             color: Colors.orange,
             child: MaterialButton(
                 padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                onPressed: () {
-                  register(email_editing_cntrlr.text, pwd_editing_cntrlr.text);
+                onPressed: () async{
+                  _auth.signUp(email: email_editing_cntrlr.text, password: pwd_editing_cntrlr.text).then((value) {
+                    if(value == null){
+                      saveDatatoFirestore();
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(value, style: const TextStyle(fontSize: 16),),
+                      ));
+                    }
+                  });
+
                 },
                 minWidth: MediaQuery.of(context).size.width,
                 child:const Text("Register", textAlign: TextAlign.center,style: TextStyle(
@@ -272,33 +282,20 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
   }
 
   //functions
-  void register(String email, String password)async{
-    if(_signup_formKey.currentState!.validate()){
-        await fAuth.createUserWithEmailAndPassword(email: email, password: password).then((value) =>
-        {
-        saveDatatoFirestore()
-        }
-        ).catchError((err){
-          Fluttertoast.showToast(msg: err!.message);
-        });
-    }
-  }
 
   saveDatatoFirestore() async{
     //initializinn firestore
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = fAuth.currentUser;
-
     user_model userModel = user_model();
 
     //maping the values
-    userModel.uid = user!.uid;
-    userModel.email = user.email;
+    userModel.uid = _auth.currentUser!.uid;
+    userModel.email = _auth.currentUser!.email;
     userModel.f_name = f_name_editing_cntrlr.text;
     userModel.l_name = l_name_editing_cntrlr.text;
     userModel.acc_type = accType;
     
-    await firebaseFirestore.collection("users").doc(user.uid).set(userModel.toMap());
+    await firebaseFirestore.collection("users").doc(_auth.currentUser!.uid).set(userModel.toMap());
     Fluttertoast.showToast(msg: "Profile created successfully");
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }

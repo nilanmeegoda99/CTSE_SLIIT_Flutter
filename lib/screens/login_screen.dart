@@ -1,4 +1,6 @@
 
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,10 +17,8 @@ class Login_Screen extends StatefulWidget {
 
 class _Login_ScreenState extends State<Login_Screen> {
 
-  //firebase
-  final fauth = FirebaseAuth.instance;
 
-  //new authservice
+  //authservice
   final AuthService _auth = AuthService();
 
   //text editing controllers
@@ -99,8 +99,18 @@ class _Login_ScreenState extends State<Login_Screen> {
       color: Colors.orange,
       child: MaterialButton(
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-        onPressed: () {
-          signIn(username_controller.text, pwd_controller.text);
+        onPressed: () async{
+          
+          _auth.signIn(email: username_controller.text, password: pwd_controller.text).then((value) {
+            if(value == null){
+              Fluttertoast.showToast(msg: "SignIn Successful");
+              Navigator.pushReplacementNamed(context, '/home');
+            }else{
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(value, style: const TextStyle(fontSize: 16),),
+              ));
+            }
+          });
         },
         minWidth: MediaQuery.of(context).size.width,
         child:const Text("Sign In", textAlign: TextAlign.center,style: TextStyle(
@@ -150,6 +160,12 @@ class _Login_ScreenState extends State<Login_Screen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
 
+                    SizedBox(
+                        height: 200,
+                        child: Image.asset(
+                          "assets/images/z_p01-SLIIT.jpg",
+                          fit: BoxFit.contain,
+                        )),
                     const SizedBox(height: 50),
                     username_field,
                     const SizedBox(height: 20),
@@ -181,12 +197,6 @@ class _Login_ScreenState extends State<Login_Screen> {
                           ),
                       ],
                     ),
-                    SizedBox(
-                        height: 200,
-                        child: Image.asset(
-                          "assets/images/z_p01-SLIIT.jpg",
-                          fit: BoxFit.contain,
-                        )),
                   ]
                 )
               ),
@@ -197,20 +207,4 @@ class _Login_ScreenState extends State<Login_Screen> {
       )
     );
   }
-
-  //functions
-
-  //signin function
-void signIn(String email, String password) async{
-    if(formKey.currentState!.validate()){
-      await fauth.signInWithEmailAndPassword(email: email, password: password).then(
-          (uid) => {
-            Fluttertoast.showToast(msg: "SignIn Successful"),
-            Navigator.pushReplacementNamed(context, '/home')
-          }
-      ).catchError((err){
-        Fluttertoast.showToast(msg: err!.message);
-      });
-    }
-}
 }

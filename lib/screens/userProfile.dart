@@ -7,6 +7,8 @@ import 'package:sliit_info_ctse/widgets/appbar_widget.dart';
 import 'package:sliit_info_ctse/widgets/button_widget.dart';
 import 'package:sliit_info_ctse/widgets/profile_widget.dart';
 
+import '../services/auth_service.dart';
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -15,18 +17,17 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   //firebase user authneication state
-  User? user = FirebaseAuth.instance.currentUser;
+  final AuthService _auth = AuthService();
   user_model currentUser = user_model();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseFirestore.instance.collection("users").doc(user!.uid).get().then(
+    FirebaseFirestore.instance.collection("users").doc(_auth.currentUser!.uid).get().then(
             (val){
-          this.currentUser = user_model.fromMap(val.data());
           setState(() {
-
+            currentUser = user_model.fromMap(val.data());
           });
         }
     );
