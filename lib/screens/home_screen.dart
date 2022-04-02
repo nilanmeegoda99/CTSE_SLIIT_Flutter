@@ -141,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
         BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.graduationCap), label:'Faculties'),
         BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.calendarDays), label:'Events'),
         BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.newspaper), label:'News'),
+        
       ],
       currentIndex: _selectedPage,
       onTap: onTapped,),

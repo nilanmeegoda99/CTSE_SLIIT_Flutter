@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/screens/signup_screen.dart';
 
+import '../services/auth_service.dart';
+
 class Login_Screen extends StatefulWidget {
   const Login_Screen({Key? key}) : super(key: key);
 
@@ -15,6 +17,9 @@ class _Login_ScreenState extends State<Login_Screen> {
 
   //firebase
   final fauth = FirebaseAuth.instance;
+
+  //new authservice
+  final AuthService _auth = AuthService();
 
   //text editing controllers
   final TextEditingController username_controller = TextEditingController();
@@ -111,8 +116,14 @@ class _Login_ScreenState extends State<Login_Screen> {
         color: Colors.orange,
         child: MaterialButton(
             padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-            onPressed: () {
-              Navigator.pushNamed(context, '/home');
+            onPressed: () async{
+             dynamic result = await _auth.getOrCreateAnoUser();
+             if(result == null){
+               print('error signing in');
+             }else {
+               print(result);
+               Navigator.pushNamed(context, '/home');
+             }
             },
             minWidth: MediaQuery.of(context).size.width,
             child:const Text("Guest View", textAlign: TextAlign.center,style: TextStyle(
