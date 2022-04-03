@@ -4,7 +4,7 @@ class event_model{
   String? event_name;
   String? venue;
   String? image_path;
-  DateTime? date_time;
+  String? date_time;
   String? description;
 
   event_model({

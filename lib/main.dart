@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sliit_info_ctse/screens/add_degree.dart';
+import 'package:sliit_info_ctse/screens/add_news.dart';
+import 'package:sliit_info_ctse/screens/admin_screen.dart';
 import 'package:sliit_info_ctse/screens/edit_prodile.dart';
 import 'package:sliit_info_ctse/screens/home_screen.dart';
 import 'package:sliit_info_ctse/screens/login_screen.dart';
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
         '/edit_profile' : (context) => EditProfilePage(),
         '/add_degree': (context) => const add_Degree_screen(),
         '/add_event': (context) => const add_Event_screen(),
+        '/add_news': (context) => const add_News_screen(),
+        '/admin': (context) => const  AdminScreen(),
       },
     );
   }

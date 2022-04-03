@@ -1,7 +1,8 @@
 
+import 'dart:ui';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 
 
@@ -93,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text("SLIIT Info Portal") ,
+        title: const Text("SLIIT INFO", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w600, fontSize: 25),) ,
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
@@ -135,24 +136,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Container(color: Colors.yellow,),
-          Container(color: Colors.blue,)
+          Container(color: Colors.blue,),
+          Container(color: Colors.red,),
         ],
 
       ),
       floatingActionButton: currentUser.acc_type == 'Admin' ? FloatingActionButton(
         onPressed: () {
-          print(currentUser.acc_type);
-          Navigator.pushNamed(context, '/add_event');
+          // print(currentUser.acc_type);
+          Navigator.pushNamed(context, '/admin');
           // Add your onPressed code here!
         },
         backgroundColor: const Color(0xff002F66),
-        child: const Icon(Icons.add, color: Colors.white,),
+        child: const Icon(Icons.admin_panel_settings_sharp, color: Colors.white,),
       ) : null,
-      bottomNavigationBar: BottomNavigationBar(items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.graduationCap), label:'Faculties'),
-        BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.calendarDays), label:'Events'),
-        BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.newspaper), label:'News'),
-        BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.newspaper), label:'Staff'),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items:  const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.graduationCap), label:'Faculties'),
+          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.calendarDays), label:'Events'),
+          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.newspaper), label:'News'),
+          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.person), label:'Staff'),
       ],
       currentIndex: _selectedPage,
       onTap: onTapped,),

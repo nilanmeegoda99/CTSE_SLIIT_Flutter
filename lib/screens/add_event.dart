@@ -1,9 +1,11 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/model/event_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:sliit_info_ctse/widgets/appBar2.dart';
 
 class add_Event_screen extends StatefulWidget {
   const add_Event_screen({Key? key}) : super(key: key);
@@ -22,7 +24,8 @@ class _add_Event_screenState extends State<add_Event_screen> {
   final desc_editing_cntrlr = new TextEditingController();
 
   //event date and time
-  DateTime? event_dateTime;
+  String _date = "Not set";
+  String _time = "Not set";
 
   //signup form key
   final _event_formKey = GlobalKey<FormState>();
@@ -92,27 +95,134 @@ class _add_Event_screenState extends State<add_Event_screen> {
       ),
     );
 
-    final datetimepicker = Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(width: 0.8),
-      ),
-      padding: const EdgeInsets.fromLTRB(100, 1, 100, 1),
-      child: TextButton(
+    //date and time picker
+    final datetimepicker = Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElevatedButton(
+          style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+              ),
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+          ),
           onPressed: () {
             DatePicker.showDatePicker(context,
+                theme: const DatePickerTheme(
+                  containerHeight: 210.0,
+                ),
                 showTitleActions: true,
-                minTime: DateTime(2022, 3, 5),
-                maxTime: DateTime(2056, 6, 7), onChanged: (date) {
-                  print('change $date');
-                }, onConfirm: (date) {
+                minTime: DateTime(2000, 1, 1),
+                maxTime: DateTime(2055, 12, 31), onConfirm: (date) {
                   print('confirm $date');
+                  _date = '${date.year} - ${date.month} - ${date.day}';
+                  setState(() {});
                 }, currentTime: DateTime.now(), locale: LocaleType.en);
           },
-          child: Text(
-            'Select Date & Time',
-            style: TextStyle(color: Colors.blue),
-          )),
+          child: Container(
+            alignment: Alignment.center,
+            height: 50.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          const Icon(
+                            Icons.date_range,
+                            size: 18.0,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            " $_date",
+                            style: const TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                const Text(
+                  "  Change",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0)),
+            ),
+            backgroundColor: MaterialStateProperty.all(Colors.white),
+          ),
+          onPressed: () {
+            DatePicker.showTimePicker(context,
+                theme: const DatePickerTheme(
+                  containerHeight: 210.0,
+                ),
+                showTitleActions: true, onConfirm: (time) {
+                  print('confirm $time');
+                  _time = '${time.hour} : ${time.minute} : ${time.second}';
+                  setState(() {});
+                }, currentTime: DateTime.now(), locale: LocaleType.en);
+            setState(() {});
+          },
+          child: Container(
+            alignment: Alignment.center,
+            height: 50.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          const Icon(
+                            Icons.access_time,
+                            size: 18.0,
+                            color: Colors.grey,
+                          ),
+                          Text(
+                            " $_time",
+                            style: const TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                const Text(
+                  "  Change",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
     );
 
     //description field
@@ -171,16 +281,7 @@ class _add_Event_screenState extends State<add_Event_screen> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color:Colors.orange),
-            onPressed: (){
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
+        appBar: buildLoggedAppBar(context),
         body: Center(
           child: SingleChildScrollView(
               child: Container(
@@ -233,6 +334,7 @@ class _add_Event_screenState extends State<add_Event_screen> {
     eventModel.event_name = event_name_editing_cntrlr.text;
     eventModel.venue = venue_editing_cntrlr.text;
     eventModel.description = desc_editing_cntrlr.text;
+    eventModel.date_time = '$_date at $_time';
 
 
     await firebaseFirestore.collection('events').doc().set(eventModel.toMap());

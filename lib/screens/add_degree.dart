@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/model/degree_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sliit_info_ctse/widgets/appBar2.dart';
 
 class add_Degree_screen extends StatefulWidget {
   const add_Degree_screen({Key? key}) : super(key: key);
@@ -201,16 +202,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color:Colors.orange),
-            onPressed: (){
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
+        appBar: buildLoggedAppBar(context),
         body: Center(
           child: SingleChildScrollView(
               child: Container(

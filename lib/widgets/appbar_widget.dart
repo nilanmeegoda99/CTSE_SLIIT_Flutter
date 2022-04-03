@@ -7,7 +7,7 @@ AppBar buildAppBar(BuildContext context) {
     backgroundColor: Colors.transparent,
     elevation: 0,
     leading: IconButton(
-      icon: Icon(Icons.arrow_back, color:Colors.orange),
+      icon: const Icon(Icons.arrow_back, color:Colors.orange),
       onPressed: (){
         Navigator.pop(context);
       },
