@@ -20,9 +20,9 @@ class _AdminScreenState extends State<AdminScreen> {
   ];
 
   List<String> configsLinks = [
-    '/add_degree',
-    '/add_event',
-    '/add_news',
+    '/degreeList',
+    '/eventList',
+    '/newsList',
     '/lecture_config',
     '/student_config',
   ];

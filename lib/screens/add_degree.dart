@@ -193,7 +193,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
               submitData();
             },
             minWidth: MediaQuery.of(context).size.width,
-            child:const Text("Submit", textAlign: TextAlign.center,style: TextStyle(
+            child:const Text("Add Degree", textAlign: TextAlign.center,style: TextStyle(
                 fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
             ),)
         )
@@ -262,7 +262,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
 
     await firebaseFirestore.collection('degrees').doc().set(degreeModel.toMap());
     Fluttertoast.showToast(msg: "Data added successfully");
-    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    Navigator.pop(context);
   }
 }
 

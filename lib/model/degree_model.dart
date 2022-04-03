@@ -25,4 +25,13 @@ Map<String, dynamic> toMap(){
     'description': description,
   };
  }
+
+ //retrieve data from the server
+degree_model.fromSnapshot(snapshot):
+      name = snapshot.data()['name'],
+      faculty = snapshot.data()['faculty'],
+      entry_req = snapshot.data()['entry_req'],
+      duration = snapshot.data()['duration'],
+      description = snapshot.data()['description'];
+
 }

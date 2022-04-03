@@ -339,7 +339,7 @@ class _add_Event_screenState extends State<add_Event_screen> {
 
     await firebaseFirestore.collection('events').doc().set(eventModel.toMap());
     Fluttertoast.showToast(msg: "Event added successfully");
-    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    Navigator.pop(context);
   }
 }
 

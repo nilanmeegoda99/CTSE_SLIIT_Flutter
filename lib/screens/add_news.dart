@@ -167,11 +167,12 @@ class _add_News_screenState extends State<add_News_screen> {
     //maping the values
     newsModel.title = title_editing_cntrlr.text;
     newsModel.description = desc_editing_cntrlr.text;
+    newsModel.createdOn = DateTime.now();
 
 
     await firebaseFirestore.collection('news').doc().set(newsModel.toMap());
     Fluttertoast.showToast(msg: "News added successfully");
-    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    Navigator.pop(context);
   }
 }
 

@@ -8,7 +8,7 @@ AppBar buildLoggedAppBar(BuildContext context){
   return AppBar(
     backgroundColor: Colors.transparent,
     elevation: 0,
-    title: const Text("SLIIT INFO", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w600, fontSize: 25),) ,
+    title: const Text("SLIIT INFO", style: TextStyle(color: Color(0xff002F66), fontWeight: FontWeight.w600, fontSize: 25),) ,
     leading: IconButton(
       icon: const Icon(Icons.arrow_back, color:Colors.orange),
       onPressed: (){

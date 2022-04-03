@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:sliit_info_ctse/screens/add_degree.dart';
 import 'package:sliit_info_ctse/screens/add_news.dart';
 import 'package:sliit_info_ctse/screens/admin_screen.dart';
+import 'package:sliit_info_ctse/screens/degree_list.dart';
 import 'package:sliit_info_ctse/screens/edit_prodile.dart';
+import 'package:sliit_info_ctse/screens/events_list.dart';
 import 'package:sliit_info_ctse/screens/home_screen.dart';
 import 'package:sliit_info_ctse/screens/login_screen.dart';
+import 'package:sliit_info_ctse/screens/news_list.dart';
 import 'package:sliit_info_ctse/screens/signup_screen.dart';
 import 'package:sliit_info_ctse/screens/userProfile.dart';
 
@@ -42,6 +45,9 @@ class MyApp extends StatelessWidget {
         '/add_event': (context) => const add_Event_screen(),
         '/add_news': (context) => const add_News_screen(),
         '/admin': (context) => const  AdminScreen(),
+        '/degreeList': (context) => const  degreeList(),
+        '/eventList': (context) => const  eventList(),
+        '/newsList' : (context) => const newsList(),
       },
     );
   }
