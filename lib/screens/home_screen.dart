@@ -1,6 +1,3 @@
-
-import 'dart:ui';
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
@@ -9,6 +6,7 @@ import "package:flutter/material.dart";
 
 import '../model/user_model.dart';
 import '../services/auth_service.dart';
+import 'degrees_info.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -211,28 +209,33 @@ class _GridDemoPhotoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget image = Material(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-      clipBehavior: Clip.antiAlias,
-      child: Image.asset(
-        photo.assetName,
-        fit: BoxFit.cover,
-      ),
-    );
-        return GridTile(
-          footer: Material(
-            color: Colors.transparent,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(4)),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: GridTileBar(
-              backgroundColor: Color(photo.tileColor),
-              title: _GridTitleText(photo.title),
-              subtitle: _GridTitleText(photo.subtitle),
-            ),
+
+        final Widget image = Material(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          clipBehavior: Clip.antiAlias,
+          child: Image.asset(
+            photo.assetName,
+            fit: BoxFit.cover,
           ),
-          child: image,
+        );
+
+        return GestureDetector(
+          onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => degreeInfo(faculty: photo.title))),
+          child: GridTile(
+            footer: Material(
+              color: Colors.transparent,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(4)),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: GridTileBar(
+                backgroundColor: Color(photo.tileColor),
+                title: _GridTitleText(photo.title),
+                subtitle: _GridTitleText(photo.subtitle),
+              ),
+            ),
+            child: image,
+          ),
         );
   }
 }
