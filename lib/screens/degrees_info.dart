@@ -15,11 +15,16 @@ class degreeInfo extends StatefulWidget {
   State<degreeInfo> createState() => _degreeInfoState();
 }
 
+
+
 class _degreeInfoState extends State<degreeInfo> {
 
-  //collection reference
-  final CollectionReference _degrees =
-  FirebaseFirestore.instance.collection('degrees');
+
+  @override
+  void initState(){
+    final String _faculty = widget.faculty;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +34,12 @@ class _degreeInfoState extends State<degreeInfo> {
         children: [
           Padding(
                   padding: const EdgeInsets.fromLTRB(1,5,1,5),
-                  child: Text('FACULTY OF ' + widget.faculty, style: TextStyle(fontSize: 26),),
+                  child: Text('FACULTY OF ' + widget.faculty, style: const TextStyle(fontSize: 26),),
                 ),
           const SizedBox(height: 20,),
           Expanded(
-            child:  StreamBuilder<Object>(
-                stream: _degrees.snapshots(),
+            child:  StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('degrees').where('faculty', isEqualTo: 'Computing').snapshots(),
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if(snapshot.hasData){
                     return ListView.builder(
