@@ -15,11 +15,6 @@ class _eventInfoState extends State<eventInfo> {
   Widget build(BuildContext context) {
     return  Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-            child: Text('Events',
-              style: TextStyle(fontSize: 26),),
-          ),
           const SizedBox(height: 20,),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(

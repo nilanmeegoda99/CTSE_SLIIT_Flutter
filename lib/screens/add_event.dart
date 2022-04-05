@@ -57,7 +57,7 @@ class _add_Event_screenState extends State<add_Event_screen> {
   String _date = "Not set";
   String _time = "Not set";
 
-  //signup form key
+  //event form key
   final _event_formKey = GlobalKey<FormState>();
 
   @override

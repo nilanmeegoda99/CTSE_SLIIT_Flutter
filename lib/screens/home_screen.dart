@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:sliit_info_ctse/widgets/degreeCard.dart';
 import 'package:sliit_info_ctse/widgets/events_Info_widget.dart';
+import 'package:sliit_info_ctse/widgets/news_Info_widget.dart';
 
 
 
@@ -145,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text('Events',
                   style: TextStyle(fontSize: 26),),
               ),
-              eventInfo(),
+              Expanded(child: eventInfo()),
             ],
           ),
             Column(
@@ -155,6 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text('News',
                   style: TextStyle(fontSize: 26),),
             ),
+              Expanded(child: newsInfo()),
             ],
             ),
             Column(

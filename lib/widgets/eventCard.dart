@@ -16,7 +16,7 @@ class eventCard extends StatelessWidget {
   Widget build(BuildContext context) =>
       Card(
         shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.grey, width: 2),
+            side: const BorderSide(color: Colors.grey, width: 1),
             borderRadius: BorderRadius.circular(5)
         ),
         margin: const EdgeInsets.fromLTRB(12,15,12,12),
@@ -26,41 +26,43 @@ class eventCard extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: Text('Event: '+ event_name, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 22),),
-              subtitle: Text('on: '+ date_time + 'at' + venue, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+              subtitle: Text('On : '+ date_time + '  At : ' + venue, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
             ),
-            // Column(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: [
-            //     Expanded(
-            //       child: Container(
-            //         color: Colors.grey[50],
-            //         child: Center(
-            //           child: Expanded(
-            //             child: Image.network(image_path,
-            //               width: 300,
-            //               height: 150,
-            //               fit: BoxFit.cover,
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:  <Widget>[
-                const SizedBox(height: 5),
-                const Text('About', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(description, textAlign: TextAlign.justify,),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 4, // 40%
+                  child: Container(
+                    color: Colors.grey[50],
+                    child: Center(
+                      child: Expanded(
+                        child: Image.network(image_path,
+                          width: 300,
+                          height: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 20),
-
+                Expanded(
+                  flex: 6, // 60%
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:  <Widget>[
+                      const SizedBox(height: 2),
+                      const Text('About', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(description, textAlign: TextAlign.justify,),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
               ],
-            ),
+            )
           ],
         ),
       );

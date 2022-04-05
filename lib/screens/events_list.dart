@@ -20,47 +20,59 @@ class _eventListState extends State<eventList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildLoggedAppBar(context),
-      body: StreamBuilder(
-        stream: _events.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if(snapshot.hasData){
-            return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index){
-                  final DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
-                  return Card(
-                    margin: const EdgeInsets.all(10),
-                    child:ListTile(
-                      tileColor: Colors.white70,
-                      title: Text(documentSnapshot['event_name'], style: const TextStyle(fontWeight: FontWeight.bold),),
-                      subtitle: Text('At ' + documentSnapshot['venue']),
-                      leading:  const CircleAvatar(
-                        child: FaIcon(FontAwesomeIcons.calendarDays, color: Colors.white,)
-                      ),
-                      trailing: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: [
-                            IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.green,),
-                                onPressed: () {
-                                }),
-                            IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red,),
-                                onPressed: () {
-                                  _deleteEvent(documentSnapshot.id);
-                                }
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+            child: Text('Available Events',
+              style: TextStyle(fontSize: 26),),
+          ),
+          const SizedBox(height: 20,),
+          Expanded(
+            child: StreamBuilder(
+              stream: _events.snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if(snapshot.hasData){
+                  return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index){
+                        final DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
+                        return Card(
+                          margin: const EdgeInsets.all(10),
+                          child:ListTile(
+                            tileColor: Colors.white70,
+                            title: Text(documentSnapshot['event_name'], style: const TextStyle(fontWeight: FontWeight.bold),),
+                            subtitle: Text('At ' + documentSnapshot['venue']),
+                            leading:  const CircleAvatar(
+                              child: FaIcon(FontAwesomeIcons.calendarDays, color: Colors.white,)
                             ),
-                          ],
-                        ),
-                      ),),
-                  );
-                });
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.edit, color: Colors.green,),
+                                      onPressed: () {
+                                      }),
+                                  IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red,),
+                                      onPressed: () {
+                                        _deleteEvent(documentSnapshot.id);
+                                      }
+                                  ),
+                                ],
+                              ),
+                            ),),
+                        );
+                      });
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

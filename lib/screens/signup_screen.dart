@@ -1,8 +1,11 @@
 
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sliit_info_ctse/model/user_model.dart';
 import 'package:sliit_info_ctse/services/auth_service.dart';
 
@@ -15,6 +18,11 @@ class SignUp_Screen extends StatefulWidget {
 }
 
 class _SignUp_ScreenState extends State<SignUp_Screen> {
+
+  //picked image file
+  PlatformFile? pickedFile;
+  late String uploadedImgUrl;
+
 
   //authservice
   final AuthService _auth = AuthService();
@@ -73,6 +81,44 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
             borderRadius: BorderRadius.circular(10),
           )
       ),
+    );
+
+    //image picker button viewer
+    final imagePickerButton = Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            RawMaterialButton(
+              fillColor: Theme.of(context).colorScheme.secondary,
+              child: const FaIcon(FontAwesomeIcons.photoFilm, color: Colors.white,),
+              elevation: 2,
+              onPressed: () {
+                getImage();
+              },
+              padding: const EdgeInsets.all(15),
+              shape: const CircleBorder(),
+            ),
+            if(pickedFile != null)
+              Expanded(
+                child: Container(
+                  color: Colors.grey[50],
+                  child: Center(
+                    child: Expanded(
+                      child: Image.file(
+                        File(pickedFile!.path!),
+                        width: 400,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+          ],
+        )
+      ],
     );
 
     //lastname field
@@ -211,9 +257,11 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
             child: MaterialButton(
                 padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
                 onPressed: () async{
-                  _auth.signUp(email: email_editing_cntrlr.text, password: pwd_editing_cntrlr.text).then((value) {
+                  _auth.signUp(email: email_editing_cntrlr.text, password: pwd_editing_cntrlr.text).then((value) async {
                     if(value == null){
-                      saveDatatoFirestore();
+                      await uploadFile().then((value){
+                        saveDatatoFirestore();
+                      });
                     }else{
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(value, style: const TextStyle(fontSize: 16),),
@@ -236,47 +284,60 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color:Colors.orange),
+            icon: const Icon(Icons.arrow_back, color:Colors.orange),
             onPressed: (){
               Navigator.of(context).pop();
             },
           ),
         ),
-        body: Center(
-          child: SingleChildScrollView(
-              child: Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Form(
-                        key: _signup_formKey,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
+        body: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+              child: Text('Create a new account',
+                style: TextStyle(fontSize: 26),),
+            ),
+            const SizedBox(height: 10,),
+            Center(
+                  child: Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: Form(
+                            key: _signup_formKey,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      const Text('Profile Picture : '),
+                                      imagePickerButton
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  fNameField,
+                                  const SizedBox(height: 20),
+                                  lNameField,
+                                  const SizedBox(height: 20),
+                                  accTypeField,
+                                  const SizedBox(height: 20),
+                                  username_field,
+                                  const SizedBox(height: 20),
+                                  pwd_field,
+                                  const SizedBox(height: 20),
+                                  confirm_pwd_field,
+                                  const SizedBox(height: 40),
+                                  signUpBtn,
 
-                              const SizedBox(height: 50),
-                              fNameField,
-                              const SizedBox(height: 20),
-                              lNameField,
-                              const SizedBox(height: 20),
-                              accTypeField,
-                              const SizedBox(height: 20),
-                              username_field,
-                              const SizedBox(height: 20),
-                              pwd_field,
-                              const SizedBox(height: 20),
-                              confirm_pwd_field,
-                              const SizedBox(height: 40),
-                              signUpBtn,
+                                ]
+                            )
+                        ),
+                      )
 
-                            ]
-                        )
-                    ),
                   )
-
-              )
-          ),
+              ),
+          ],
         )
     );
   }
@@ -294,11 +355,40 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
     userModel.f_name = f_name_editing_cntrlr.text;
     userModel.l_name = l_name_editing_cntrlr.text;
     userModel.acc_type = accType;
+    userModel.imagePath = uploadedImgUrl;
     
     await firebaseFirestore.collection("users").doc(_auth.currentUser!.uid).set(userModel.toMap());
     Fluttertoast.showToast(msg: "Profile created successfully");
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
+
+  // File Picker select image
+  Future getImage() async {
+    final result = await FilePicker.platform.pickFiles();
+    if(result == null) return;
+    setState(() {
+      pickedFile = result.files.first;
+    });
+  }
+
+  //upload to the firebase storage
+  Future uploadFile() async{
+    final path = 'uploads/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+    UploadTask uploadTask = ref.putFile(file);
+
+    String urlDownload = await (await uploadTask).ref.getDownloadURL();
+    print('download url: $urlDownload');
+
+    setState(() {
+      uploadedImgUrl = urlDownload;
+    });
+  }
+
+
+
 }
 
     

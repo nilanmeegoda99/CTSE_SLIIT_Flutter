@@ -21,50 +21,65 @@ class _newsListState extends State<newsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildLoggedAppBar(context),
-      body: StreamBuilder(
-        stream: _news.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if(snapshot.hasData){
-            return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index){
-                  final DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
-                  Timestamp timeFrmServer = documentSnapshot['createdOn'];
-                  DateTime datetimeConverted = timeFrmServer.toDate();
-                  var gFormat = DateFormat.yMMMd().add_jm().format(datetimeConverted);
-                  return Card(
-                    margin: const EdgeInsets.all(10),
-                    child:ListTile(
-                      tileColor: Colors.white70,
-                      title: Text(documentSnapshot['title'], style: const TextStyle(fontWeight: FontWeight.bold),),
-                      subtitle: Text('Created on ' + gFormat.toString()),
-                      leading: const CircleAvatar(
-                          child: FaIcon(FontAwesomeIcons.newspaper, color: Colors.white,)
-                      ),
-                      trailing: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: [
-                            IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.green,),
-                                onPressed: () {
-                                }),
-                            IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red,),
-                                onPressed: () {
-                                  _deleteNews(documentSnapshot.id);
-                                }
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+            child: Text('Available News',
+              style: TextStyle(fontSize: 26),),
+          ),
+          const SizedBox(height: 20,),
+          Expanded(
+            child: StreamBuilder(
+              stream: _news.snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if(snapshot.hasData){
+                  return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index){
+                        final DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
+
+                        //converting timestamp to string
+                        Timestamp timeFrmServer = documentSnapshot['createdOn'];
+                        DateTime datetimeConverted = timeFrmServer.toDate();
+                        var formattedTime = DateFormat.yMMMd().add_jm().format(datetimeConverted);
+
+                        return Card(
+                          margin: const EdgeInsets.all(10),
+                          child:ListTile(
+                            tileColor: Colors.white70,
+                            title: Text(documentSnapshot['title'], style: const TextStyle(fontWeight: FontWeight.bold),),
+                            subtitle: Text('Created on ' + formattedTime.toString()),
+                            leading: const CircleAvatar(
+                                child: FaIcon(FontAwesomeIcons.newspaper, color: Colors.white,)
                             ),
-                          ],
-                        ),
-                      ),),
-                  );
-                });
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.edit, color: Colors.green,),
+                                      onPressed: () {
+                                      }),
+                                  IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red,),
+                                      onPressed: () {
+                                        _deleteNews(documentSnapshot.id);
+                                      }
+                                  ),
+                                ],
+                              ),
+                            ),),
+                        );
+                      });
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

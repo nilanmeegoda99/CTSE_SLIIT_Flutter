@@ -20,45 +20,57 @@ class _degreeListState extends State<degreeList> {
     return Scaffold(
       appBar: buildLoggedAppBar(context),
       body:
-      StreamBuilder(
-        stream: _degrees.snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if(snapshot.hasData){
-            return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index){
-                  final DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
-                  return Card(
-                    margin: const EdgeInsets.all(10),
-                    child:ListTile(
-                      tileColor: Colors.white70,
-                      title: Text(documentSnapshot['name'], style: const TextStyle(fontWeight: FontWeight.bold),),
-                      subtitle: Text(documentSnapshot['faculty']),
-                      leading: const CircleAvatar(backgroundImage: AssetImage('assets/images/degree_icon.png')),
-                      trailing: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: [
-                            IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.green,),
-                                onPressed: () {
-                                }),
-                            IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red,),
-                                onPressed: () {
-                                  _deleteDegree(documentSnapshot.id);
-                              }
+      Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+            child: Text('Available Degrees',
+              style: TextStyle(fontSize: 26),),
+          ),
+          const SizedBox(height: 20,),
+          Expanded(
+            child: StreamBuilder(
+              stream: _degrees.snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if(snapshot.hasData){
+                  return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index){
+                        final DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
+                        return Card(
+                          margin: const EdgeInsets.all(10),
+                          child:ListTile(
+                            tileColor: Colors.white70,
+                            title: Text(documentSnapshot['name'], style: const TextStyle(fontWeight: FontWeight.bold),),
+                            subtitle: Text(documentSnapshot['faculty']),
+                            leading: const CircleAvatar(backgroundImage: AssetImage('assets/images/degree_icon.png')),
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.edit, color: Colors.green,),
+                                      onPressed: () {
+                                      }),
+                                  IconButton(
+                                      icon: const Icon(Icons.delete, color: Colors.red,),
+                                      onPressed: () {
+                                        _deleteDegree(documentSnapshot.id);
+                                    }
+                                    ),
+                                ],
                               ),
-                          ],
-                        ),
-                      ),),
-                  );
-                });
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+                            ),),
+                        );
+                      });
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
