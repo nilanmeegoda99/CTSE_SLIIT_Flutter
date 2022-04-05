@@ -20,6 +20,8 @@ AppBar buildLoggedAppBar(BuildContext context){
         icon: const Icon(Icons.logout_rounded, color:Colors.orange, size: 35,),
         onPressed: (){
           _auth.signOut();
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Signed Out Successfully')));
           Navigator.pushReplacementNamed(context, '/');
         },
         padding: const EdgeInsets.only(right: 10),

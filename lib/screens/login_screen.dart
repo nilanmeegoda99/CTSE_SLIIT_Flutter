@@ -136,7 +136,7 @@ class _Login_ScreenState extends State<Login_Screen> {
              }
             },
             minWidth: MediaQuery.of(context).size.width,
-            child:const Text("Guest View", textAlign: TextAlign.center,style: TextStyle(
+            child:const Text("As a Guest", textAlign: TextAlign.center,style: TextStyle(
                 fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
             ),)
         )

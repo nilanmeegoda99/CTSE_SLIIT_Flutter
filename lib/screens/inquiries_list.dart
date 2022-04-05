@@ -2,26 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../widgets/loggedAppBar.dart';
 
-class degreeList extends StatefulWidget {
-  const degreeList({Key? key}) : super(key: key);
+class inquiryList extends StatefulWidget {
+  const inquiryList({Key? key}) : super(key: key);
 
   @override
-  State<degreeList> createState() => _degreeListState();
+  State<inquiryList> createState() => _inquiryListState();
 }
 
-class _degreeListState extends State<degreeList> {
+class _inquiryListState extends State<inquiryList> {
 
   //collection reference
-  final CollectionReference _degrees =
-  FirebaseFirestore.instance.collection('degrees');
+  final CollectionReference _inquiries =
+  FirebaseFirestore.instance.collection('inquiries');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildLoggedAppBar(context),
-      body:
-      StreamBuilder(
-        stream: _degrees.snapshots(),
+      body: StreamBuilder(
+        stream: _inquiries.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if(snapshot.hasData){
             return ListView.builder(
@@ -29,12 +28,15 @@ class _degreeListState extends State<degreeList> {
                 itemBuilder: (context, index){
                   final DocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
                   return Card(
-                    margin: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(12),
                     child:ListTile(
                       tileColor: Colors.white70,
-                      title: Text(documentSnapshot['name'], style: const TextStyle(fontWeight: FontWeight.bold),),
-                      subtitle: Text(documentSnapshot['faculty']),
-                      leading: const CircleAvatar(backgroundImage: AssetImage('assets/images/degree_icon.png')),
+                      title: Text('Enquiry No: ${index + 1}', style: const TextStyle(fontWeight: FontWeight.bold),),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.fromLTRB(2,5,2,5),
+                        child: Text(documentSnapshot['inquiryDesc']),
+                      ),
+                      leading: const CircleAvatar(backgroundImage: AssetImage('assets/images/enquiry-icon.png')),
                       trailing: SizedBox(
                         width: 100,
                         child: Row(
@@ -47,8 +49,8 @@ class _degreeListState extends State<degreeList> {
                                 icon: const Icon(Icons.delete, color: Colors.red,),
                                 onPressed: () {
                                   _deleteDegree(documentSnapshot.id);
-                              }
-                              ),
+                                }
+                            ),
                           ],
                         ),
                       ),),
@@ -63,7 +65,7 @@ class _degreeListState extends State<degreeList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // print(currentUser.acc_type);
-          Navigator.pushNamed(context, '/add_degree');
+          Navigator.pushNamed(context, '/add_inquiry');
           // Add your onPressed code here!
         },
         backgroundColor: const Color(0xff002F66),
@@ -74,9 +76,9 @@ class _degreeListState extends State<degreeList> {
 
   //delete function
   Future<void> _deleteDegree(String degreeId) async {
-    await _degrees.doc(degreeId).delete();
+    await _inquiries.doc(degreeId).delete();
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You have successfully deleted a Degree')));
+        content: Text('You have successfully deleted a Inquiry')));
   }
 }

@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/model/degree_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sliit_info_ctse/widgets/appBar2.dart';
+import 'package:sliit_info_ctse/widgets/loggedAppBar.dart';
 
 class add_Degree_screen extends StatefulWidget {
   const add_Degree_screen({Key? key}) : super(key: key);
@@ -16,13 +16,13 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
 
 
   //account types
-  final faculties = ['Computing','Engineering', 'Business', 'Humanties & SCI', 'Postgraduate', 'Architecture', 'Hospitality'];
+  final faculties = ['COMPUTING','ENGINEERING', 'BUSINESS', 'HUMANTISE & SCI', 'POSTGRADUATE', 'ARCHITECTURE', 'HOSPITALITY'];
 
   //text editor controllers
-  final deg_name_editing_cntrlr = new TextEditingController();
-  final entry_req_editing_cntrlr = new TextEditingController();
-  final duration_editing_cntrlr = new TextEditingController();
-  final desc_editing_cntrlr = new TextEditingController();
+  final deg_name_editing_cntrlr = TextEditingController();
+  final entry_req_editing_cntrlr = TextEditingController();
+  final duration_editing_cntrlr = TextEditingController();
+  final desc_editing_cntrlr = TextEditingController();
 
   //faculty type
   String? faculty;

@@ -1,10 +1,13 @@
-
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/model/news_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sliit_info_ctse/widgets/appBar2.dart';
+import 'package:sliit_info_ctse/widgets/loggedAppBar.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 
 class add_News_screen extends StatefulWidget {
@@ -16,7 +19,33 @@ class add_News_screen extends StatefulWidget {
 
 class _add_News_screenState extends State<add_News_screen> {
 
+  PlatformFile? pickedFile;
+  late String uploadedImgUrl;
 
+  // File Picker select image
+    Future getImage() async {
+      final result = await FilePicker.platform.pickFiles();
+      if(result == null) return;
+      setState(() {
+        pickedFile = result.files.first;
+      });
+    }
+
+    //upload to the firebase storage
+    Future uploadFile() async{
+      final path = 'uploads/${pickedFile!.name}';
+      final file = File(pickedFile!.path!);
+
+      final ref = FirebaseStorage.instance.ref().child(path);
+      UploadTask uploadTask = ref.putFile(file);
+
+      String urlDownload = await (await uploadTask).ref.getDownloadURL();
+      print('download url: $urlDownload');
+
+      setState(() {
+        uploadedImgUrl = urlDownload;
+      });
+    }
 
   //text editor controllers
   final title_editing_cntrlr = new TextEditingController();
@@ -61,6 +90,44 @@ class _add_News_screenState extends State<add_News_screen> {
             borderRadius: BorderRadius.circular(10),
           )
       ),
+    );
+
+    //image picker button viewer
+    final imagePickerButton = Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            RawMaterialButton(
+              fillColor: Theme.of(context).colorScheme.secondary,
+              child: const FaIcon(FontAwesomeIcons.fileImage, color: Colors.white,),
+              elevation: 2,
+              onPressed: () {
+                getImage();
+              },
+              padding: const EdgeInsets.all(15),
+              shape: const CircleBorder(),
+            ),
+            if(pickedFile != null)
+              Expanded(
+                child: Container(
+                  color: Colors.grey[50],
+                  child: Center(
+                    child: Expanded(
+                      child: Image.file(
+                        File(pickedFile!.path!),
+                        width: 400,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+          ],
+        )
+      ],
     );
 
     //description field
@@ -133,7 +200,8 @@ class _add_News_screenState extends State<add_News_screen> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
 
-                              const SizedBox(height: 50),
+                              imagePickerButton,
+                              const SizedBox(height: 30),
                               news_title_Field,
                               const SizedBox(height: 20),
                               description_field,
@@ -154,7 +222,9 @@ class _add_News_screenState extends State<add_News_screen> {
   //functions
   void submitData()async{
     if(_news_formKey.currentState!.validate()){
-      saveDatatoFirestore();
+      await uploadFile().then((value){
+        saveDatatoFirestore();
+      });
     }
   }
 
@@ -168,6 +238,7 @@ class _add_News_screenState extends State<add_News_screen> {
     newsModel.title = title_editing_cntrlr.text;
     newsModel.description = desc_editing_cntrlr.text;
     newsModel.createdOn = DateTime.now();
+    newsModel.image = uploadedImgUrl;
 
 
     await firebaseFirestore.collection('news').doc().set(newsModel.toMap());

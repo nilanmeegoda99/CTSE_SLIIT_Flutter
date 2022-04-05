@@ -7,12 +7,16 @@ import 'package:sliit_info_ctse/screens/degree_list.dart';
 import 'package:sliit_info_ctse/screens/edit_prodile.dart';
 import 'package:sliit_info_ctse/screens/events_list.dart';
 import 'package:sliit_info_ctse/screens/home_screen.dart';
+import 'package:sliit_info_ctse/screens/inquiries_list.dart';
 import 'package:sliit_info_ctse/screens/login_screen.dart';
 import 'package:sliit_info_ctse/screens/news_list.dart';
 import 'package:sliit_info_ctse/screens/signup_screen.dart';
+import 'package:sliit_info_ctse/screens/staff_list.dart';
+import 'package:sliit_info_ctse/screens/student_list.dart';
 import 'package:sliit_info_ctse/screens/userProfile.dart';
 
 import 'screens/add_event.dart';
+import 'screens/add_inquiry.dart';
 
 
 
@@ -48,6 +52,10 @@ class MyApp extends StatelessWidget {
         '/degreeList': (context) => const  degreeList(),
         '/eventList': (context) => const  eventList(),
         '/newsList' : (context) => const newsList(),
+        '/staffList' : (context) => const staffList(),
+        '/studentList' : (context) => const studentList(),
+        '/add_inquiry' : (context) => const add_InquiryScreen(),
+        '/inquiries' : (context) => const inquiryList(),
       },
     );
   }

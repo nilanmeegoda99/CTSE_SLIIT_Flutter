@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sliit_info_ctse/widgets/appBar2.dart';
+import 'package:sliit_info_ctse/widgets/loggedAppBar.dart';
 
 class eventList extends StatefulWidget {
   const eventList({Key? key}) : super(key: key);

@@ -1,11 +1,14 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
+import 'package:sliit_info_ctse/widgets/degreeCard.dart';
+import 'package:sliit_info_ctse/widgets/events_Info_widget.dart';
 
 
 
 import '../model/user_model.dart';
 import '../services/auth_service.dart';
+import '../widgets/eventCard.dart';
 import 'degrees_info.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -99,6 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.logout_rounded, color:Colors.orange, size: 35,),
             onPressed: (){
               _auth.signOut();
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Signed Out Successfully')));
               Navigator.pushReplacementNamed(context, '/');
             },
             padding: const EdgeInsets.only(right: 10),
@@ -133,9 +138,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Container(color: Colors.yellow,),
-          Container(color: Colors.blue,),
-          Container(color: Colors.red,),
+          Column(
+            children:  const [
+              Padding(
+                padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                child: Text('Events',
+                  style: TextStyle(fontSize: 26),),
+              ),
+              eventInfo(),
+            ],
+          ),
+            Column(
+            children:  const [
+            Padding(
+                padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                child: Text('News',
+                  style: TextStyle(fontSize: 26),),
+            ),
+            ],
+            ),
+            Column(
+            children:  const [
+            Padding(
+              padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+              child: Text('Lectures',
+                style: TextStyle(fontSize: 26),),
+              ),
+            ],
+            ),
         ],
 
       ),
@@ -147,7 +177,15 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         backgroundColor: const Color(0xff002F66),
         child: const Icon(Icons.admin_panel_settings_sharp, color: Colors.white,),
-      ) : null,
+      ) :  currentUser.acc_type == 'Student' ? FloatingActionButton(
+        onPressed: () {
+          // print(currentUser.acc_type);
+          Navigator.pushNamed(context, '/inquiries');
+          //  onPressed code here!
+        },
+        backgroundColor: const Color(0xff002F66),
+        child: const Icon(Icons.question_answer, color: Colors.white,),
+      ) :null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items:  const <BottomNavigationBarItem>[

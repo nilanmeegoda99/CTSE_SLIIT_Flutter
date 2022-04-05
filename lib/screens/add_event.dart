@@ -1,11 +1,15 @@
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/model/event_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:sliit_info_ctse/widgets/appBar2.dart';
+import 'package:sliit_info_ctse/widgets/loggedAppBar.dart';
 
 class add_Event_screen extends StatefulWidget {
   const add_Event_screen({Key? key}) : super(key: key);
@@ -16,7 +20,33 @@ class add_Event_screen extends StatefulWidget {
 
 class _add_Event_screenState extends State<add_Event_screen> {
 
+  PlatformFile? pickedFile;
+  late String uploadedImgUrl;
 
+// File Picker select image
+  Future getImage() async {
+    final result = await FilePicker.platform.pickFiles();
+    if(result == null) return;
+    setState(() {
+      pickedFile = result.files.first;
+    });
+  }
+
+  //upload to the firebase storage
+  Future uploadFile() async{
+    final path = 'uploads/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+    UploadTask uploadTask = ref.putFile(file);
+
+    String urlDownload = await (await uploadTask).ref.getDownloadURL();
+    print('download url: $urlDownload');
+
+    setState(() {
+      uploadedImgUrl = urlDownload;
+    });
+  }
 
   //text editor controllers
   final event_name_editing_cntrlr = new TextEditingController();
@@ -93,6 +123,44 @@ class _add_Event_screenState extends State<add_Event_screen> {
             borderRadius: BorderRadius.circular(10),
           )
       ),
+    );
+
+    //image picker button viewer
+    final imagePickerButton = Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            RawMaterialButton(
+              fillColor: Theme.of(context).colorScheme.secondary,
+              child: const FaIcon(FontAwesomeIcons.fileImage, color: Colors.white,),
+              elevation: 2,
+              onPressed: () {
+                getImage();
+              },
+              padding: const EdgeInsets.all(15),
+              shape: const CircleBorder(),
+            ),
+            if(pickedFile != null)
+              Expanded(
+                child: Container(
+                  color: Colors.grey[50],
+                  child: Center(
+                    child: Expanded(
+                      child: Image.file(
+                      File(pickedFile!.path!),
+                        width: 400,
+                        height: 150,
+                        fit: BoxFit.cover,
+                  ),
+                    ),
+                  ),
+                ),
+              )
+          ],
+        )
+      ],
     );
 
     //date and time picker
@@ -294,8 +362,8 @@ class _add_Event_screenState extends State<add_Event_screen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-
-                              const SizedBox(height: 50),
+                              imagePickerButton,
+                              const SizedBox(height: 30),
                               event_title_Field,
                               const SizedBox(height: 20),
                               venue_field,
@@ -320,9 +388,14 @@ class _add_Event_screenState extends State<add_Event_screen> {
   //functions
   void submitData()async{
     if(_event_formKey.currentState!.validate()){
-      saveDatatoFirestore();
+      await uploadFile().then((value){
+        saveDatatoFirestore();
+      });
     }
+
   }
+
+
 
   saveDatatoFirestore() async{
     //initializinn firestore
@@ -335,12 +408,14 @@ class _add_Event_screenState extends State<add_Event_screen> {
     eventModel.venue = venue_editing_cntrlr.text;
     eventModel.description = desc_editing_cntrlr.text;
     eventModel.date_time = '$_date at $_time';
+    eventModel.image_path = uploadedImgUrl;
 
 
     await firebaseFirestore.collection('events').doc().set(eventModel.toMap());
     Fluttertoast.showToast(msg: "Event added successfully");
     Navigator.pop(context);
   }
+
 }
 
 
