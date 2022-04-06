@@ -3,9 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:sliit_info_ctse/widgets/degreeCard.dart';
 import 'package:sliit_info_ctse/widgets/events_Info_widget.dart';
+import 'package:sliit_info_ctse/widgets/gradient_background.dart';
 import 'package:sliit_info_ctse/widgets/news_Info_widget.dart';
-
-
 
 import '../model/user_model.dart';
 import '../services/auth_service.dart';
@@ -20,74 +19,67 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _selectedPage = 0;
+  PageController pageController = PageController();
 
- int _selectedPage = 0;
- PageController pageController = PageController();
+  //authservice
+  final AuthService _auth = AuthService();
+  user_model currentUser = user_model();
 
- //authservice
- final AuthService _auth = AuthService();
- user_model currentUser = user_model();
+  @override
+  void initState() {
+    // init state
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .get()
+        .then((val) {
+      setState(() {
+        currentUser = user_model.fromMap(val.data());
+      });
+    });
+  }
 
- @override
- void initState() {
-   // init state
-   super.initState();
-   FirebaseFirestore.instance.collection("users").doc(_auth.currentUser!.uid).get().then(
-           (val){
-         setState(() {
-           currentUser = user_model.fromMap(val.data());
-         });
-       }
-   );
- }
-
- List<_Photo> _photos(BuildContext context) {
-
-   return [
-     _Photo(
-       assetName: 'assets/images/computing.jpg',
-       title: "COMPUTING",
-       subtitle: "Local & International",
-       tileColor: 0xff053769
-     ),
-     _Photo(
-       assetName: 'assets/images/engineering.jpg',
-       title: "ENGINEERING",
-       subtitle: "Local & International",
-         tileColor: 0xff2A8945
-     ),
-     _Photo(
-       assetName: 'assets/images/business.jpg',
-       title: "BUSINESS",
-       subtitle: "Local & International",
-         tileColor: 0xffAA0B38
-     ),
-     _Photo(
-       assetName: 'assets/images/humantise.jpg',
-       title: "HUMANTISE & SCI",
-       subtitle: "International",
-         tileColor: 0xff873E8D
-     ),
-     _Photo(
-       assetName: 'assets/images/graduate.jpg',
-       title: "POSTGRADUATE",
-       subtitle: "Local & International",
-         tileColor: 0xffED9736
-     ),
-     _Photo(
-       assetName: 'assets/images/archi.jpg',
-       title: "ARCHITECTURE",
-       subtitle: "International",
-         tileColor: 0xff009FE3
-     ),
-     _Photo(
-       assetName: 'assets/images/hospitality.jpg',
-       title: "HOSPITALITY",
-       subtitle: "International",
-         tileColor: 0xffF5821F
-     ),
-   ];
- }
+  List<_Photo> _photos(BuildContext context) {
+    return [
+      _Photo(
+          assetName: 'assets/images/computing.jpg',
+          title: "COMPUTING",
+          subtitle: "Local & International",
+          tileColor: 0xff053769),
+      _Photo(
+          assetName: 'assets/images/engineering.jpg',
+          title: "ENGINEERING",
+          subtitle: "Local & International",
+          tileColor: 0xff2A8945),
+      _Photo(
+          assetName: 'assets/images/business.jpg',
+          title: "BUSINESS",
+          subtitle: "Local & International",
+          tileColor: 0xffAA0B38),
+      _Photo(
+          assetName: 'assets/images/humantise.jpg',
+          title: "HUMANTISE & SCI",
+          subtitle: "International",
+          tileColor: 0xff873E8D),
+      _Photo(
+          assetName: 'assets/images/graduate.jpg',
+          title: "POSTGRADUATE",
+          subtitle: "Local & International",
+          tileColor: 0xffED9736),
+      _Photo(
+          assetName: 'assets/images/archi.jpg',
+          title: "ARCHITECTURE",
+          subtitle: "International",
+          tileColor: 0xff009FE3),
+      _Photo(
+          assetName: 'assets/images/hospitality.jpg',
+          title: "HOSPITALITY",
+          subtitle: "International",
+          tileColor: 0xffF5821F),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,117 +88,163 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text("SLIIT INFO", style: TextStyle(color: Color(0xff002F66), fontWeight: FontWeight.w600, fontSize: 25),) ,
+        title: const Text(
+          "SLIIT INFO",
+          style: TextStyle(
+              color: Color(0xff002F66),
+              fontWeight: FontWeight.w600,
+              fontSize: 25),
+        ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout_rounded, color:Colors.orange, size: 35,),
-            onPressed: (){
+            icon: const Icon(
+              Icons.logout_rounded,
+              color: Colors.orange,
+              size: 35,
+            ),
+            onPressed: () {
               _auth.signOut();
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Signed Out Successfully')));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Signed Out Successfully')));
               Navigator.pushReplacementNamed(context, '/');
             },
             padding: const EdgeInsets.only(right: 10),
           ),
           IconButton(
-            icon: const Icon(Icons.account_circle, color:Colors.orange, size: 35,),
-            onPressed: (){
+            icon: const Icon(
+              Icons.account_circle,
+              color: Colors.orange,
+              size: 35,
+            ),
+            onPressed: () {
               Navigator.pushNamed(context, '/userprofile');
             },
             padding: const EdgeInsets.only(right: 10),
           ),
         ],
       ),
-      body: PageView(
-        controller: pageController,
-        children: [
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GridView.count(
-                restorationId: 'grid_view_demo_grid_offset',
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                padding: const EdgeInsets.all(8),
-                childAspectRatio: 1,
-                children: _photos(context).map<Widget>((photo) {
-                  return _GridDemoPhotoItem(
-                    photo: photo,
-                  );
-                }).toList(),
-              ),
+      body: GradientBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color:
+                    const Color.fromARGB(255, 240, 239, 239).withOpacity(0.5)),
+            child: PageView(
+              controller: pageController,
+              children: [
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: GridView.count(
+                      restorationId: 'grid_view_demo_grid_offset',
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      padding: const EdgeInsets.all(8),
+                      childAspectRatio: 1,
+                      children: _photos(context).map<Widget>((photo) {
+                        return _GridDemoPhotoItem(
+                          photo: photo,
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                Column(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                      child: Text(
+                        'Events',
+                        style: TextStyle(fontSize: 26),
+                      ),
+                    ),
+                    Expanded(child: eventInfo()),
+                  ],
+                ),
+                Column(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                      child: Text(
+                        'News',
+                        style: TextStyle(fontSize: 26),
+                      ),
+                    ),
+                    Expanded(child: newsInfo()),
+                  ],
+                ),
+                Column(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                      child: Text(
+                        'Lectures',
+                        style: TextStyle(fontSize: 26),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          Column(
-            children:  const [
-              Padding(
-                padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-                child: Text('Events',
-                  style: TextStyle(fontSize: 26),),
-              ),
-              Expanded(child: eventInfo()),
-            ],
-          ),
-            Column(
-            children:  const [
-            Padding(
-                padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-                child: Text('News',
-                  style: TextStyle(fontSize: 26),),
-            ),
-              Expanded(child: newsInfo()),
-            ],
-            ),
-            Column(
-            children:  const [
-            Padding(
-              padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-              child: Text('Lectures',
-                style: TextStyle(fontSize: 26),),
-              ),
-            ],
-            ),
-        ],
-
+        ),
       ),
-      floatingActionButton: currentUser.acc_type == 'Admin' ? FloatingActionButton(
-        onPressed: () {
-          // print(currentUser.acc_type);
-          Navigator.pushNamed(context, '/admin');
-          // Add your onPressed code here!
-        },
-        backgroundColor: const Color(0xff002F66),
-        child: const Icon(Icons.admin_panel_settings_sharp, color: Colors.white,),
-      ) :  currentUser.acc_type == 'Student' ? FloatingActionButton(
-        onPressed: () {
-          // print(currentUser.acc_type);
-          Navigator.pushNamed(context, '/inquiries');
-          //  onPressed code here!
-        },
-        backgroundColor: const Color(0xff002F66),
-        child: const Icon(Icons.question_answer, color: Colors.white,),
-      ) :null,
+      floatingActionButton: currentUser.acc_type == 'Admin'
+          ? FloatingActionButton(
+              onPressed: () {
+                // print(currentUser.acc_type);
+                Navigator.pushNamed(context, '/admin');
+                // Add your onPressed code here!
+              },
+              backgroundColor: const Color(0xff002F66),
+              child: const Icon(
+                Icons.admin_panel_settings_sharp,
+                color: Colors.white,
+              ),
+            )
+          : currentUser.acc_type == 'Student'
+              ? FloatingActionButton(
+                  onPressed: () {
+                    // print(currentUser.acc_type);
+                    Navigator.pushNamed(context, '/inquiries');
+                    //  onPressed code here!
+                  },
+                  backgroundColor: const Color(0xff002F66),
+                  child: const Icon(
+                    Icons.question_answer,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        items:  const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.graduationCap), label:'Faculties'),
-          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.calendarDays), label:'Events'),
-          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.newspaper), label:'News'),
-          BottomNavigationBarItem(icon: FaIcon(FontAwesomeIcons.person), label:'Staff'),
-      ],
-      currentIndex: _selectedPage,
-      onTap: onTapped,),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.graduationCap), label: 'Faculties'),
+          BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.calendarDays), label: 'Events'),
+          BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.newspaper), label: 'News'),
+          BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.person), label: 'Staff'),
+        ],
+        currentIndex: _selectedPage,
+        onTap: onTapped,
+      ),
     );
   }
 
-void onTapped(int index){
+  void onTapped(int index) {
     setState(() {
       _selectedPage = index;
     });
-    pageController.animateToPage(index, duration: const Duration(milliseconds: 1000), curve: Curves.easeIn);
-}
+    pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 1000), curve: Curves.easeIn);
+  }
 }
 
 class _Photo {
@@ -249,33 +287,36 @@ class _GridDemoPhotoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Widget image = Material(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(
+        photo.assetName,
+        fit: BoxFit.cover,
+      ),
+    );
 
-        final Widget image = Material(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    return GestureDetector(
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  degreeInfo(faculty: photo.title))),
+      child: GridTile(
+        footer: Material(
+          color: Colors.transparent,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(4)),
+          ),
           clipBehavior: Clip.antiAlias,
-          child: Image.asset(
-            photo.assetName,
-            fit: BoxFit.cover,
+          child: GridTileBar(
+            backgroundColor: Color(photo.tileColor),
+            title: _GridTitleText(photo.title),
+            subtitle: _GridTitleText(photo.subtitle),
           ),
-        );
-
-        return GestureDetector(
-          onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => degreeInfo(faculty: photo.title))),
-          child: GridTile(
-            footer: Material(
-              color: Colors.transparent,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(4)),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: GridTileBar(
-                backgroundColor: Color(photo.tileColor),
-                title: _GridTitleText(photo.title),
-                subtitle: _GridTitleText(photo.subtitle),
-              ),
-            ),
-            child: image,
-          ),
-        );
+        ),
+        child: image,
+      ),
+    );
   }
 }

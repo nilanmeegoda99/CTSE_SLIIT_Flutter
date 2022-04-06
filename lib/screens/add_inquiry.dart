@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sliit_info_ctse/services/auth_service.dart';
+import 'package:sliit_info_ctse/widgets/gradient_background.dart';
 import 'package:sliit_info_ctse/widgets/loggedAppBar.dart';
 
 import '../model/inquiry_model.dart';
@@ -15,7 +16,6 @@ class add_InquiryScreen extends StatefulWidget {
 }
 
 class _add_InquiryScreenState extends State<add_InquiryScreen> {
-
   final AuthService _authService = AuthService();
 
   //text editor controllers
@@ -28,24 +28,23 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     //Degree title field
     final studentName_Field = TextFormField(
       autofocus: false,
       controller: name_editing_cntrlr,
       keyboardType: TextInputType.text,
       //field validation
-      validator: (val){
+      validator: (val) {
         RegExp regex = RegExp(r'^.{3,}$');
-        if(val!.isEmpty){
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
-        if(!regex.hasMatch(val)){
+        if (!regex.hasMatch(val)) {
           return ("minimum length is 3 characters");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         name_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -58,8 +57,7 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
           hintText: "Your Name",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //entry requirement field
@@ -68,13 +66,13 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
       controller: contactNo_editing_cntrlr,
       keyboardType: TextInputType.phone,
       //field validation
-      validator: (val){
-        if(val!.isEmpty){
+      validator: (val) {
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         contactNo_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -87,10 +85,8 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
           hintText: "Contact Number",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
-
 
     //description field
     final inquiryDesc_field = TextFormField(
@@ -100,17 +96,17 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
       maxLines: 6,
       keyboardType: TextInputType.multiline,
       //field validation
-      validator: (val){
+      validator: (val) {
         RegExp regex = RegExp(r'^.{6,}$');
-        if(val!.isEmpty){
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
-        if(!regex.hasMatch(val)){
+        if (!regex.hasMatch(val)) {
           return ("minimum length is 6 characters");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         inquiry_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.done,
@@ -123,14 +119,12 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
           hintText: "Please type your enquiry here",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
-
 
     //submit button
     final submitBtn = Material(
-        elevation : 5,
+        elevation: 5,
         borderRadius: BorderRadius.circular(25),
         color: Colors.orange,
         child: MaterialButton(
@@ -139,66 +133,72 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
               submitData();
             },
             minWidth: MediaQuery.of(context).size.width,
-            child:const Text("Submit Inquiry", textAlign: TextAlign.center,style: TextStyle(
-                fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
-            ),)
-        )
-    );
-
-
+            child: const Text(
+              "Submit Inquiry",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )));
 
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: buildLoggedAppBar(context),
-        body: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-              child: Text('Add a enquiry',
-                style: TextStyle(fontSize: 26),),
-            ),
-            Center(
-              child: SingleChildScrollView(
-                  child: Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Form(
-                            key: _inquiry_formKey,
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  studentName_Field,
-                                  const SizedBox(height: 20),
-                                  contactNo_field,
-                                  const SizedBox(height: 20),
-                                  inquiryDesc_field,
-                                  const SizedBox(height: 40),
-                                  submitBtn,
-
-                                ]
-                            )
-                        ),
-                      )
-
-                  )
+        body: GradientBackground(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color.fromARGB(255, 240, 239, 239)
+                      .withOpacity(0.5)),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                    child: Text(
+                      'Add a enquiry',
+                      style: TextStyle(fontSize: 26),
+                    ),
+                  ),
+                  Center(
+                    child: SingleChildScrollView(
+                        child: Container(
+                            // color: Colors.white,
+                            child: Padding(
+                      padding: const EdgeInsets.all(25.0),
+                      child: Form(
+                          key: _inquiry_formKey,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                studentName_Field,
+                                const SizedBox(height: 20),
+                                contactNo_field,
+                                const SizedBox(height: 20),
+                                inquiryDesc_field,
+                                const SizedBox(height: 40),
+                                submitBtn,
+                              ])),
+                    ))),
+                  ),
+                ],
               ),
             ),
-          ],
-        )
-    );
-
+          ),
+        ));
   }
 
   //functions
-  void submitData()async{
-    if(_inquiry_formKey.currentState!.validate()){
+  void submitData() async {
+    if (_inquiry_formKey.currentState!.validate()) {
       saveDatatoFirestore();
     }
   }
 
-  saveDatatoFirestore() async{
+  saveDatatoFirestore() async {
     //initializinn firestore
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
@@ -210,10 +210,11 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
     inquiryModel.contactNo = contactNo_editing_cntrlr.text;
     inquiryModel.inquiryDesc = inquiry_editing_cntrlr.text;
 
-
-    await firebaseFirestore.collection('inquiries').doc().set(inquiryModel.toMap());
+    await firebaseFirestore
+        .collection('inquiries')
+        .doc()
+        .set(inquiryModel.toMap());
     Fluttertoast.showToast(msg: "Inquiry submitted successfully");
     Navigator.pop(context);
   }
-
 }

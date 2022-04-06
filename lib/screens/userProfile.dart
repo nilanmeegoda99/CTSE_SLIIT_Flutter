@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sliit_info_ctse/model/user_model.dart';
 import 'package:sliit_info_ctse/widgets/appbar_widget.dart';
 import 'package:sliit_info_ctse/widgets/button_widget.dart';
+import 'package:sliit_info_ctse/widgets/gradient_background.dart';
 import 'package:sliit_info_ctse/widgets/profile_widget.dart';
 
 import '../services/auth_service.dart';
@@ -15,7 +16,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   //firebase user authneication state
   final AuthService _auth = AuthService();
   user_model currentUser = user_model();
@@ -24,95 +24,106 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseFirestore.instance.collection("users").doc(_auth.currentUser!.uid).get().then(
-            (val){
-          setState(() {
-            currentUser = user_model.fromMap(val.data());
-          });
-        }
-    );
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .get()
+        .then((val) {
+      setState(() {
+        currentUser = user_model.fromMap(val.data());
+      });
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: buildAppBar(context),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: [
-          ProfileWidget(
-            imagePath: "${currentUser.imagePath}",
-            onClicked: () {
-              Navigator.pushNamed(context, '/edit_profile');
-            },
+      body: GradientBackground(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color:
+                    const Color.fromARGB(255, 240, 239, 239).withOpacity(0.5)),
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              children: [
+                ProfileWidget(
+                  imagePath: "${currentUser.imagePath}",
+                  onClicked: () {
+                    Navigator.pushNamed(context, '/edit_profile');
+                  },
+                ),
+                const SizedBox(height: 24),
+                buildName(currentUser),
+                const SizedBox(height: 48),
+                buildAbout(currentUser),
+                const SizedBox(height: 54),
+                Center(child: accDeleteButton()),
+              ],
+            ),
           ),
-          const SizedBox(height: 24),
-          buildName(currentUser),
-          const SizedBox(height: 48),
-          buildAbout(currentUser),
-          const SizedBox(height: 54),
-          Center(child: accDeleteButton()),
-        ],
+        ),
       ),
     );
   }
 
   Widget buildName(user_model user) => Column(
-    children: [
-      Text(
-        "${user.f_name} ${user.l_name}",
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-      ),
-      const SizedBox(height: 4),
-      Text(
-        "${user.email}",
-        style: TextStyle(color: Colors.grey),
-      )
-    ],
-  );
+        children: [
+          Text(
+            "${user.f_name} ${user.l_name}",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            "${user.email}",
+            style: TextStyle(color: Color.fromARGB(255, 110, 110, 110)),
+          )
+        ],
+      );
 
   Widget accDeleteButton() => ButtonWidget(
-    text: 'Delete My Account',
-    onClicked: () {},
-  );
+        text: 'Delete My Account',
+        onClicked: () {},
+      );
 
   Widget buildAbout(user_model user) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 48),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'First Name',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        padding: const EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'First Name',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "${user.f_name}",
+              style: const TextStyle(fontSize: 16, height: 1.4),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Last Name',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "${user.l_name}",
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Account Type',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "${user.acc_type}",
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
+          ],
         ),
-        const SizedBox(height: 10),
-        Text(
-          "${user.f_name}",
-          style: const TextStyle(fontSize: 16, height: 1.4),
-        ),
-        const SizedBox(height: 20),
-        const Text(
-          'Last Name',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          "${user.l_name}",
-          style: TextStyle(fontSize: 16, height: 1.4),
-        ),
-        const SizedBox(height: 20),
-        const Text(
-          'Account Type',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          "${user.acc_type}",
-          style: TextStyle(fontSize: 16, height: 1.4),
-        ),
-      ],
-    ),
-  );
+      );
 }

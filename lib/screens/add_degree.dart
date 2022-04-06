@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/model/degree_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sliit_info_ctse/widgets/gradient_background.dart';
 import 'package:sliit_info_ctse/widgets/loggedAppBar.dart';
 
 class add_Degree_screen extends StatefulWidget {
@@ -13,10 +14,16 @@ class add_Degree_screen extends StatefulWidget {
 }
 
 class _add_Degree_screenState extends State<add_Degree_screen> {
-
-
   //account types
-  final faculties = ['COMPUTING','ENGINEERING', 'BUSINESS', 'HUMANTISE & SCI', 'POSTGRADUATE', 'ARCHITECTURE', 'HOSPITALITY'];
+  final faculties = [
+    'COMPUTING',
+    'ENGINEERING',
+    'BUSINESS',
+    'HUMANTISE & SCI',
+    'POSTGRADUATE',
+    'ARCHITECTURE',
+    'HOSPITALITY'
+  ];
 
   //text editor controllers
   final deg_name_editing_cntrlr = TextEditingController();
@@ -31,32 +38,33 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
   final _degree_formKey = GlobalKey<FormState>();
 
   //menu item
-  DropdownMenuItem<String> buildMenuItem(String item) =>
-      DropdownMenuItem(value: item, child: Text(
-        item,
-        style: const TextStyle(fontSize: 16),
-      ),);
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: const TextStyle(fontSize: 16),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
-
     //Degree title field
     final degree_titlt_Field = TextFormField(
       autofocus: false,
       controller: deg_name_editing_cntrlr,
       keyboardType: TextInputType.text,
       //field validation
-      validator: (val){
+      validator: (val) {
         RegExp regex = new RegExp(r'^.{3,}$');
-        if(val!.isEmpty){
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
-        if(!regex.hasMatch(val)){
+        if (!regex.hasMatch(val)) {
           return ("minimum length is 3 characters");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         deg_name_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -69,8 +77,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
           hintText: "Degree Titile",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //entry requirement field
@@ -81,13 +88,13 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
       maxLines: 5,
       keyboardType: TextInputType.multiline,
       //field validation
-      validator: (val){
-        if(val!.isEmpty){
+      validator: (val) {
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         entry_req_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -100,8 +107,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
           hintText: "Entry Requirements",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //Faculty field
@@ -115,7 +121,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
         value: faculty,
         isExpanded: true,
         items: faculties.map(buildMenuItem).toList(),
-        onChanged: (value) => setState(()=> this.faculty = value),
+        onChanged: (value) => setState(() => this.faculty = value),
       ),
     );
 
@@ -125,13 +131,13 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
       controller: duration_editing_cntrlr,
       keyboardType: TextInputType.text,
       //duration field validation
-      validator: (val){
-        if (val!.isEmpty){
+      validator: (val) {
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         duration_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -144,8 +150,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
           hintText: "Duration",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //description field
@@ -154,17 +159,17 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
       controller: desc_editing_cntrlr,
       keyboardType: TextInputType.multiline,
       //field validation
-      validator: (val){
+      validator: (val) {
         RegExp regex = new RegExp(r'^.{6,}$');
-        if(val!.isEmpty){
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
-        if(!regex.hasMatch(val)){
+        if (!regex.hasMatch(val)) {
           return ("minimum length is 6 characters");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         desc_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -177,14 +182,12 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
           hintText: "Description",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
-
 
     //submit button
     final submitBtn = Material(
-        elevation : 5,
+        elevation: 5,
         borderRadius: BorderRadius.circular(25),
         color: Colors.orange,
         child: MaterialButton(
@@ -193,61 +196,66 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
               submitData();
             },
             minWidth: MediaQuery.of(context).size.width,
-            child:const Text("Add Degree", textAlign: TextAlign.center,style: TextStyle(
-                fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
-            ),)
-        )
-    );
-
+            child: const Text(
+              "Add Degree",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )));
 
     return Scaffold(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         appBar: buildLoggedAppBar(context),
-        body: Center(
-          child: SingleChildScrollView(
-              child: Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Form(
-                        key: _degree_formKey,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-
-                              const SizedBox(height: 50),
-                              degree_titlt_Field,
-                              const SizedBox(height: 20),
-                              entry_req_field,
-                              const SizedBox(height: 20),
-                              faculty_TypeField,
-                              const SizedBox(height: 20),
-                              duration_field,
-                              const SizedBox(height: 20),
-                              description_field,
-                              const SizedBox(height: 40),
-                              submitBtn,
-
-                            ]
-                        )
-                    ),
-                  )
-
-              )
+        body: GradientBackground(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color.fromARGB(255, 240, 239, 239)
+                      .withOpacity(0.5)),
+              child: Center(
+                child: SingleChildScrollView(
+                    child: Container(
+                        // color: Colors.white,
+                        child: Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Form(
+                      key: _degree_formKey,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            const SizedBox(height: 50),
+                            degree_titlt_Field,
+                            const SizedBox(height: 20),
+                            entry_req_field,
+                            const SizedBox(height: 20),
+                            faculty_TypeField,
+                            const SizedBox(height: 20),
+                            duration_field,
+                            const SizedBox(height: 20),
+                            description_field,
+                            const SizedBox(height: 40),
+                            submitBtn,
+                          ])),
+                ))),
+              ),
+            ),
           ),
-        )
-    );
+        ));
   }
 
   //functions
-  void submitData()async{
-    if(_degree_formKey.currentState!.validate()){
-        saveDatatoFirestore();
+  void submitData() async {
+    if (_degree_formKey.currentState!.validate()) {
+      saveDatatoFirestore();
     }
   }
 
-  saveDatatoFirestore() async{
+  saveDatatoFirestore() async {
     //initializinn firestore
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
@@ -260,10 +268,11 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
     degreeModel.description = desc_editing_cntrlr.text;
     degreeModel.faculty = faculty;
 
-    await firebaseFirestore.collection('degrees').doc().set(degreeModel.toMap());
+    await firebaseFirestore
+        .collection('degrees')
+        .doc()
+        .set(degreeModel.toMap());
     Fluttertoast.showToast(msg: "Data added successfully");
     Navigator.pop(context);
   }
 }
-
-
