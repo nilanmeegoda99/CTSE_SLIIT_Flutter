@@ -249,6 +249,7 @@ class _GridDemoPhotoItem extends StatelessWidget {
 
   final _Photo photo;
 
+
   @override
   Widget build(BuildContext context) {
 

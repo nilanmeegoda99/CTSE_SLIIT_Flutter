@@ -15,6 +15,19 @@ class _degreeListState extends State<degreeList> {
   final CollectionReference _degrees =
   FirebaseFirestore.instance.collection('degrees');
 
+  //text editor controllers
+  final deg_name_editing_cntrlr = TextEditingController();
+  final entry_req_editing_cntrlr = TextEditingController();
+  final duration_editing_cntrlr = TextEditingController();
+  final desc_editing_cntrlr = TextEditingController();
+
+  //account types
+  final faculties = ['COMPUTING','ENGINEERING', 'BUSINESS', 'HUMANTISE & SCI', 'POSTGRADUATE', 'ARCHITECTURE', 'HOSPITALITY'];
+
+  //faculty type
+  String? faculty;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +64,7 @@ class _degreeListState extends State<degreeList> {
                                   IconButton(
                                       icon: const Icon(Icons.edit, color: Colors.green,),
                                       onPressed: () {
+                                        _updateDegree(documentSnapshot);
                                       }),
                                   IconButton(
                                       icon: const Icon(Icons.delete, color: Colors.red,),
@@ -91,4 +105,116 @@ class _degreeListState extends State<degreeList> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('You have successfully deleted a Degree')));
   }
+
+  //update function
+  Future<void> _updateDegree([DocumentSnapshot? documentSnapshot]) async {
+    String action = 'create';
+    if (documentSnapshot != null) {
+      action = 'update';
+      deg_name_editing_cntrlr.text = documentSnapshot['name'].toString();
+      entry_req_editing_cntrlr.text = documentSnapshot['entry_req'].toString();
+      duration_editing_cntrlr.text = documentSnapshot['duration'].toString();
+      desc_editing_cntrlr.text = documentSnapshot['description'].toString();
+      faculty = documentSnapshot['faculty'].toString();
+
+    }
+
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller:  deg_name_editing_cntrlr,
+                  decoration: const InputDecoration(
+                    labelText: 'Degree Name',
+                  ),
+                ),
+                TextField(
+                  controller: duration_editing_cntrlr,
+                  decoration: const InputDecoration(
+                    labelText: 'Degree Duration',
+                  ),
+                ),
+              DropdownButtonFormField<String>(
+                value: faculty,
+                isExpanded: true,
+                items: faculties.map(buildMenuItem).toList(),
+                onChanged: (value) => setState(()=> faculty = value),
+              ),
+                TextField(
+                  controller: entry_req_editing_cntrlr,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 1,
+                  maxLines: 8,
+                  decoration: const InputDecoration(labelText: 'Entry requirements'),
+                ),
+                TextField(
+                  controller: desc_editing_cntrlr,
+                  minLines: 1,
+                  maxLines: 8,
+                  keyboardType: TextInputType.multiline,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  child: const Text('Update'),
+                  onPressed: () async {
+                    final String? degreeName = deg_name_editing_cntrlr.text;
+                    final String? entryReq = entry_req_editing_cntrlr.text;
+                    final String? durationDeg = duration_editing_cntrlr.text;
+                    final String? facultyDeg = faculty;
+                    final String? descriptionDeg = desc_editing_cntrlr.text;
+
+                    if (degreeName != null) {
+
+                      if (action == 'update') {
+                        await _degrees.doc(documentSnapshot!.id).update({
+                          "name" : degreeName,
+                          "entry_req" : entryReq,
+                          "duration" : durationDeg,
+                          "description" : descriptionDeg,
+                          "faculty" :  facultyDeg
+                        });
+                      }
+
+                      deg_name_editing_cntrlr.text = '';
+                      entry_req_editing_cntrlr.text = '';
+                      duration_editing_cntrlr.text = '';
+                      desc_editing_cntrlr.text = '';
+
+                      setState(() {
+                        faculty = '';
+                      });
+
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Updated Successfully')));
+                    }
+                  },
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  //menu item
+  DropdownMenuItem<String> buildMenuItem(String item) =>
+      DropdownMenuItem(value: item, child: Text(
+        item,
+        style: const TextStyle(fontSize: 16),
+      ),);
+
 }

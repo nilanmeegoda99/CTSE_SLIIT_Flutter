@@ -17,6 +17,12 @@ class _newsListState extends State<newsList> {
   final CollectionReference _news =
   FirebaseFirestore.instance.collection('news');
 
+  //text editor controllers
+  final title_editing_cntrlr = TextEditingController();
+  final desc_editing_cntrlr = TextEditingController();
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +105,75 @@ class _newsListState extends State<newsList> {
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('You have successfully deleted a news')));
+  }
+
+  //update function
+  Future<void> _updateNews([DocumentSnapshot? documentSnapshot]) async {
+    String action = 'create';
+    if (documentSnapshot != null) {
+      action = 'update';
+      title_editing_cntrlr.text = documentSnapshot['title'].toString();
+      desc_editing_cntrlr.text = documentSnapshot['description'].toString();
+
+    }
+
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller:  title_editing_cntrlr,
+                  decoration: const InputDecoration(
+                    labelText: 'Degree Name',
+                  ),
+                ),
+                TextField(
+                  controller: desc_editing_cntrlr,
+                  minLines: 1,
+                  maxLines: 8,
+                  keyboardType: TextInputType.multiline,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  child: const Text('Update'),
+                  onPressed: () async {
+                    final String? newsTitle = title_editing_cntrlr.text;
+                    final String? descriptionNews = desc_editing_cntrlr.text;
+
+                    if (newsTitle != null) {
+                      if (action == 'update') {
+                        await _news.doc(documentSnapshot!.id).update({
+                          "title" : newsTitle,
+                          "description" : descriptionNews,
+                        });
+                      }
+
+                      title_editing_cntrlr.text = '';
+                      desc_editing_cntrlr.text = '';
+
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Updated Successfully')));
+                    }
+                  },
+                )
+              ],
+            ),
+          );
+        });
   }
 
 }

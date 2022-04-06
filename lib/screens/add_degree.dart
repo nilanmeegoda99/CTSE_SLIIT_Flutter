@@ -116,7 +116,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
         isExpanded: true,
         hint: const Text('Select Faculty'),
         items: faculties.map(buildMenuItem).toList(),
-        onChanged: (value) => setState(()=> this.faculty = value),
+        onChanged: (value) => setState(()=> faculty = value),
       ),
     );
 
@@ -141,7 +141,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
             padding: EdgeInsets.all(9.0),
             child: FaIcon(FontAwesomeIcons.clock),
           ),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Duration",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -156,7 +156,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
       keyboardType: TextInputType.multiline,
       //field validation
       validator: (val){
-        RegExp regex = new RegExp(r'^.{6,}$');
+        RegExp regex =  RegExp(r'^.{6,}$');
         if(val!.isEmpty){
           return ("field cannot be empty");
         }
@@ -174,7 +174,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
             padding: EdgeInsets.all(9.0),
             child: FaIcon(FontAwesomeIcons.pen),
           ),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Description",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -189,7 +189,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
         borderRadius: BorderRadius.circular(25),
         color: Colors.orange,
         child: MaterialButton(
-            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
             onPressed: () {
               submitData();
             },
