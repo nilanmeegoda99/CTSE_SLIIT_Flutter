@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
@@ -48,4 +49,36 @@ class AuthService{
     await _firebaseAuth.signOut();
     print('signout');
   }
+
+  Future deleteUser(String email, String password) async {
+    try {
+
+      AuthCredential credentials =
+      EmailAuthProvider.credential(email: email, password: password);
+      print(currentUser);
+      await currentUser!.reauthenticateWithCredential(credentials).whenComplete(() async{
+        await DatabaseService(uid: currentUser!.uid).deleteuser(); // called from database class
+        await currentUser!.delete();
+        print('authentication completed');
+      });
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
+
+  }
+
+class DatabaseService {
+  final String uid;
+
+  DatabaseService({required this.uid});
+
+  final CollectionReference userCollection =
+  FirebaseFirestore.instance.collection('users');
+
+  Future deleteuser() {
+    return userCollection.doc(uid).delete();
+  }
+}
