@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text("SLIIT INFO", style: TextStyle(color: Color(0xff002F66), fontWeight: FontWeight.w600, fontSize: 25),) ,
+        title: const Text("I AM SLIIT", style: TextStyle(color: Color(0xff002F66), fontWeight: FontWeight.w600, fontSize: 25),) ,
         automaticallyImplyLeading: false,
         actions: [
           IconButton(

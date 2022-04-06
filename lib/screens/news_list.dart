@@ -66,6 +66,7 @@ class _newsListState extends State<newsList> {
                                   IconButton(
                                       icon: const Icon(Icons.edit, color: Colors.green,),
                                       onPressed: () {
+                                        _updateNews(documentSnapshot);
                                       }),
                                   IconButton(
                                       icon: const Icon(Icons.delete, color: Colors.red,),
