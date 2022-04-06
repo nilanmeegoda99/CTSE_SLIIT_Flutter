@@ -1,15 +1,14 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
-import 'package:sliit_info_ctse/widgets/degreeCard.dart';
 import 'package:sliit_info_ctse/widgets/events_Info_widget.dart';
 import 'package:sliit_info_ctse/widgets/news_Info_widget.dart';
+import 'package:sliit_info_ctse/widgets/lecturer_info_widget.dart';
 
 
 
 import '../model/user_model.dart';
 import '../services/auth_service.dart';
-import '../widgets/eventCard.dart';
 import 'degrees_info.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -115,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: Padding(
                 padding: EdgeInsets.all(9.0),
-                child:  currentUser.imagePath != null ?  CircleAvatar(backgroundImage: NetworkImage(currentUser!.imagePath!),
+                child:  currentUser.imagePath != null ?  CircleAvatar(backgroundImage: NetworkImage(currentUser.imagePath!),
                 ) : const CircleAvatar(backgroundImage: NetworkImage('https://firebasestorage.googleapis.com/v0/b/sliit-info-ctse.appspot.com/o/uploads%2Fimages.jpeg?alt=media&token=26ec85c5-b045-45da-8b57-05332a9b6665') ,
               )) ,
          ),
@@ -169,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text('Lectures',
                 style: TextStyle(fontSize: 26),),
               ),
+              Expanded(child: lecturersInfo()),
             ],
             ),
         ],
