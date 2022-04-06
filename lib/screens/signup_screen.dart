@@ -85,31 +85,38 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
 
     //image picker button viewer
     final imagePickerButton = Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
         Row(
           children: [
-            RawMaterialButton(
-              fillColor: Theme.of(context).colorScheme.secondary,
-              child: const FaIcon(FontAwesomeIcons.photoFilm, color: Colors.white,),
-              elevation: 2,
-              onPressed: () {
-                getImage();
-              },
-              padding: const EdgeInsets.all(15),
-              shape: const CircleBorder(),
+            const Expanded(
+              flex: 2,
+              child: Text('Profile Picture'),
+            ),
+            Expanded(
+              flex: 2,
+              child:  RawMaterialButton(
+                fillColor: Theme.of(context).colorScheme.secondary,
+                child: const FaIcon(FontAwesomeIcons.photoFilm, color: Colors.white,),
+                elevation: 2,
+                onPressed: () {
+                  getImage();
+                },
+                padding: const EdgeInsets.all(15),
+                shape: const CircleBorder(),
+              ),
             ),
             if(pickedFile != null)
               Expanded(
+                flex: 6,
                 child: Container(
                   color: Colors.grey[50],
                   child: Center(
                     child: Expanded(
                       child: Image.file(
                         File(pickedFile!.path!),
-                        width: 400,
-                        height: 150,
+                        width: 120,
+                        height: 70,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -157,6 +164,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       child: DropdownButtonFormField<String>(
         value: accType,
         isExpanded: true,
+        hint: const Text('Select Account type'),
         items: accTypes.map(buildMenuItem).toList(),
         onChanged: (value) => setState(()=> this.accType = value),
       ),
@@ -290,6 +298,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
             },
           ),
         ),
+        resizeToAvoidBottomInset : false,
         body: Column(
           children: [
             const Padding(
@@ -299,42 +308,39 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
             ),
             const SizedBox(height: 10,),
             Center(
-                  child: Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Form(
-                            key: _signup_formKey,
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Row(
-                                    children: [
-                                      const Text('Profile Picture : '),
-                                      imagePickerButton
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                  fNameField,
-                                  const SizedBox(height: 20),
-                                  lNameField,
-                                  const SizedBox(height: 20),
-                                  accTypeField,
-                                  const SizedBox(height: 20),
-                                  username_field,
-                                  const SizedBox(height: 20),
-                                  pwd_field,
-                                  const SizedBox(height: 20),
-                                  confirm_pwd_field,
-                                  const SizedBox(height: 40),
-                                  signUpBtn,
+                  child: SingleChildScrollView(
+                    child: Container(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(25.0),
+                          child: Form(
+                              key: _signup_formKey,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    imagePickerButton,
+                                    const SizedBox(height: 20),
+                                    fNameField,
+                                    const SizedBox(height: 20),
+                                    lNameField,
+                                    const SizedBox(height: 20),
+                                    accTypeField,
+                                    const SizedBox(height: 20),
+                                    username_field,
+                                    const SizedBox(height: 20),
+                                    pwd_field,
+                                    const SizedBox(height: 20),
+                                    confirm_pwd_field,
+                                    const SizedBox(height: 20),
+                                    signUpBtn,
 
-                                ]
-                            )
-                        ),
-                      )
+                                  ]
+                              )
+                          ),
+                        )
 
+                    ),
                   )
               ),
           ],

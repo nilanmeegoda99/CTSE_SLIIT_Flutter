@@ -114,6 +114,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
       child: DropdownButtonFormField<String>(
         value: faculty,
         isExpanded: true,
+        hint: const Text('Select Faculty'),
         items: faculties.map(buildMenuItem).toList(),
         onChanged: (value) => setState(()=> this.faculty = value),
       ),
@@ -167,7 +168,7 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
       onSaved: (val){
         desc_editing_cntrlr.text = val!;
       },
-      textInputAction: TextInputAction.next,
+      textInputAction: TextInputAction.done,
       decoration: InputDecoration(
           prefixIcon: const Padding(
             padding: EdgeInsets.all(9.0),
@@ -203,39 +204,48 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: buildLoggedAppBar(context),
-        body: Center(
-          child: SingleChildScrollView(
-              child: Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Form(
-                        key: _degree_formKey,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
+        body: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+              child: Text('Add a event',
+                style: TextStyle(fontSize: 26),),
+            ),
+            Center(
+              child: SingleChildScrollView(
+                  child: Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: Form(
+                            key: _degree_formKey,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
 
-                              const SizedBox(height: 50),
-                              degree_titlt_Field,
-                              const SizedBox(height: 20),
-                              entry_req_field,
-                              const SizedBox(height: 20),
-                              faculty_TypeField,
-                              const SizedBox(height: 20),
-                              duration_field,
-                              const SizedBox(height: 20),
-                              description_field,
-                              const SizedBox(height: 40),
-                              submitBtn,
+                                  const SizedBox(height: 50),
+                                  degree_titlt_Field,
+                                  const SizedBox(height: 20),
+                                  entry_req_field,
+                                  const SizedBox(height: 20),
+                                  faculty_TypeField,
+                                  const SizedBox(height: 20),
+                                  duration_field,
+                                  const SizedBox(height: 20),
+                                  description_field,
+                                  const SizedBox(height: 40),
+                                  submitBtn,
 
-                            ]
-                        )
-                    ),
+                                ]
+                            )
+                        ),
+                      )
+
                   )
-
-              )
-          ),
+              ),
+            ),
+          ],
         )
     );
   }

@@ -350,37 +350,46 @@ class _add_Event_screenState extends State<add_Event_screen> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: buildLoggedAppBar(context),
-        body: Center(
-          child: SingleChildScrollView(
-              child: Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Form(
-                        key: _event_formKey,
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              imagePickerButton,
-                              const SizedBox(height: 30),
-                              event_title_Field,
-                              const SizedBox(height: 20),
-                              venue_field,
-                              const SizedBox(height: 20),
-                              datetimepicker,
-                              const SizedBox(height: 20),
-                              description_field,
-                              const SizedBox(height: 40),
-                              submitBtn,
+        body: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+              child: Text('Add a event',
+                style: TextStyle(fontSize: 26),),
+            ),
+            Center(
+              child: SingleChildScrollView(
+                  child: Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: Form(
+                            key: _event_formKey,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  imagePickerButton,
+                                  const SizedBox(height: 20),
+                                  event_title_Field,
+                                  const SizedBox(height: 20),
+                                  venue_field,
+                                  const SizedBox(height: 20),
+                                  datetimepicker,
+                                  const SizedBox(height: 20),
+                                  description_field,
+                                  const SizedBox(height: 20),
+                                  submitBtn,
 
-                            ]
-                        )
-                    ),
+                                ]
+                            )
+                        ),
+                      )
+
                   )
-
-              )
-          ),
+              ),
+            ),
+          ],
         )
     );
   }

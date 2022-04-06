@@ -109,13 +109,15 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             padding: const EdgeInsets.only(right: 10),
           ),
-          IconButton(
-            icon: const Icon(Icons.account_circle, color:Colors.orange, size: 35,),
-            onPressed: (){
-              Navigator.pushNamed(context, '/userprofile');
-            },
-            padding: const EdgeInsets.only(right: 10),
-          ),
+          GestureDetector(
+              onTap: (){
+                Navigator.pushNamed(context, '/userprofile');
+              },
+              child: Padding(
+                padding: EdgeInsets.all(9.0),
+                child: CircleAvatar(backgroundImage: NetworkImage(currentUser.imagePath!),
+                ),
+              )),
         ],
       ),
       body: PageView(
