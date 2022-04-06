@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import 'package:sliit_info_ctse/widgets/degreeCard.dart';
 import 'package:sliit_info_ctse/widgets/events_Info_widget.dart';
 import 'package:sliit_info_ctse/widgets/gradient_background.dart';
+import 'package:sliit_info_ctse/widgets/lecturer_info_widget.dart';
 import 'package:sliit_info_ctse/widgets/news_Info_widget.dart';
 
 import '../model/user_model.dart';
@@ -186,6 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(fontSize: 26),
                       ),
                     ),
+                    Expanded(child: lecturersInfo()),
                   ],
                 ),
               ],
