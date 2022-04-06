@@ -109,15 +109,16 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             padding: const EdgeInsets.only(right: 10),
           ),
-          GestureDetector(
+         GestureDetector(
               onTap: (){
                 Navigator.pushNamed(context, '/userprofile');
               },
               child: Padding(
                 padding: EdgeInsets.all(9.0),
-                child: CircleAvatar(backgroundImage: NetworkImage(currentUser.imagePath!),
-                ),
-              )),
+                child:  currentUser.imagePath != null ?  CircleAvatar(backgroundImage: NetworkImage(currentUser!.imagePath!),
+                ) : const CircleAvatar(backgroundImage: NetworkImage('https://firebasestorage.googleapis.com/v0/b/sliit-info-ctse.appspot.com/o/uploads%2Fimages.jpeg?alt=media&token=26ec85c5-b045-45da-8b57-05332a9b6665') ,
+              )) ,
+         ),
         ],
       ),
       body: PageView(
