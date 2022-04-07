@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sliit_info_ctse/model/event_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:sliit_info_ctse/widgets/gradient_background.dart';
 import 'package:sliit_info_ctse/widgets/loggedAppBar.dart';
 
 class add_Event_screen extends StatefulWidget {
@@ -19,21 +18,20 @@ class add_Event_screen extends StatefulWidget {
 }
 
 class _add_Event_screenState extends State<add_Event_screen> {
-
   PlatformFile? pickedFile;
   late String uploadedImgUrl;
 
 // File Picker select image
   Future getImage() async {
     final result = await FilePicker.platform.pickFiles();
-    if(result == null) return;
+    if (result == null) return;
     setState(() {
       pickedFile = result.files.first;
     });
   }
 
   //upload to the firebase storage
-  Future uploadFile() async{
+  Future uploadFile() async {
     final path = 'uploads/${pickedFile!.name}';
     final file = File(pickedFile!.path!);
 
@@ -62,24 +60,23 @@ class _add_Event_screenState extends State<add_Event_screen> {
 
   @override
   Widget build(BuildContext context) {
-
     //Event title field
     final event_title_Field = TextFormField(
       autofocus: false,
       controller: event_name_editing_cntrlr,
       keyboardType: TextInputType.text,
       //field validation
-      validator: (val){
+      validator: (val) {
         RegExp regex = new RegExp(r'^.{3,}$');
-        if(val!.isEmpty){
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
-        if(!regex.hasMatch(val)){
+        if (!regex.hasMatch(val)) {
           return ("minimum length is 3 characters");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         event_name_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -92,8 +89,7 @@ class _add_Event_screenState extends State<add_Event_screen> {
           hintText: "Event Title",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //venue field
@@ -102,13 +98,13 @@ class _add_Event_screenState extends State<add_Event_screen> {
       controller: venue_editing_cntrlr,
       keyboardType: TextInputType.text,
       //field validation
-      validator: (val){
-        if(val!.isEmpty){
+      validator: (val) {
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         venue_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -121,8 +117,7 @@ class _add_Event_screenState extends State<add_Event_screen> {
           hintText: "Venue",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //image picker button viewer
@@ -134,7 +129,10 @@ class _add_Event_screenState extends State<add_Event_screen> {
           children: [
             RawMaterialButton(
               fillColor: Theme.of(context).colorScheme.secondary,
-              child: const FaIcon(FontAwesomeIcons.fileImage, color: Colors.white,),
+              child: const FaIcon(
+                FontAwesomeIcons.fileImage,
+                color: Colors.white,
+              ),
               elevation: 2,
               onPressed: () {
                 getImage();
@@ -142,18 +140,18 @@ class _add_Event_screenState extends State<add_Event_screen> {
               padding: const EdgeInsets.all(15),
               shape: const CircleBorder(),
             ),
-            if(pickedFile != null)
+            if (pickedFile != null)
               Expanded(
                 child: Container(
                   color: Colors.grey[50],
                   child: Center(
                     child: Expanded(
                       child: Image.file(
-                      File(pickedFile!.path!),
+                        File(pickedFile!.path!),
                         width: 400,
                         height: 150,
                         fit: BoxFit.cover,
-                  ),
+                      ),
                     ),
                   ),
                 ),
@@ -170,11 +168,10 @@ class _add_Event_screenState extends State<add_Event_screen> {
       children: <Widget>[
         ElevatedButton(
           style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-              ),
-          backgroundColor: MaterialStateProperty.all(Colors.white),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+            ),
+            backgroundColor: MaterialStateProperty.all(Colors.white),
           ),
           onPressed: () {
             DatePicker.showDatePicker(context,
@@ -184,10 +181,10 @@ class _add_Event_screenState extends State<add_Event_screen> {
                 showTitleActions: true,
                 minTime: DateTime(2000, 1, 1),
                 maxTime: DateTime(2055, 12, 31), onConfirm: (date) {
-                  print('confirm $date');
-                  _date = '${date.year} - ${date.month} - ${date.day}';
-                  setState(() {});
-                }, currentTime: DateTime.now(), locale: LocaleType.en);
+              print('confirm $date');
+              _date = '${date.year} - ${date.month} - ${date.day}';
+              setState(() {});
+            }, currentTime: DateTime.now(), locale: LocaleType.en);
           },
           child: Container(
             alignment: Alignment.center,
@@ -234,8 +231,7 @@ class _add_Event_screenState extends State<add_Event_screen> {
         ElevatedButton(
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
             ),
             backgroundColor: MaterialStateProperty.all(Colors.white),
           ),
@@ -245,10 +241,10 @@ class _add_Event_screenState extends State<add_Event_screen> {
                   containerHeight: 210.0,
                 ),
                 showTitleActions: true, onConfirm: (time) {
-                  print('confirm $time');
-                  _time = '${time.hour} : ${time.minute} : ${time.second}';
-                  setState(() {});
-                }, currentTime: DateTime.now(), locale: LocaleType.en);
+              print('confirm $time');
+              _time = '${time.hour} : ${time.minute} : ${time.second}';
+              setState(() {});
+            }, currentTime: DateTime.now(), locale: LocaleType.en);
             setState(() {});
           },
           child: Container(
@@ -301,17 +297,17 @@ class _add_Event_screenState extends State<add_Event_screen> {
       maxLines: 6,
       keyboardType: TextInputType.multiline,
       //field validation
-      validator: (val){
+      validator: (val) {
         RegExp regex = new RegExp(r'^.{6,}$');
-        if(val!.isEmpty){
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
-        if(!regex.hasMatch(val)){
+        if (!regex.hasMatch(val)) {
           return ("minimum length is 6 characters");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         desc_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -324,14 +320,12 @@ class _add_Event_screenState extends State<add_Event_screen> {
           hintText: "Description",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
-
 
     //submit button
     final submitBtn = Material(
-        elevation : 5,
+        elevation: 5,
         borderRadius: BorderRadius.circular(25),
         color: Colors.orange,
         child: MaterialButton(
@@ -340,73 +334,86 @@ class _add_Event_screenState extends State<add_Event_screen> {
               submitData();
             },
             minWidth: MediaQuery.of(context).size.width,
-            child:const Text("Submit", textAlign: TextAlign.center,style: TextStyle(
-                fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
-            ),)
-        )
-    );
-
+            child: const Text(
+              "Submit",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )));
 
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: buildLoggedAppBar(context),
-        body: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-              child: Text('Add a event',
-                style: TextStyle(fontSize: 26),),
-            ),
-            Center(
-              child: SingleChildScrollView(
-                  child: Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Form(
-                            key: _event_formKey,
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  imagePickerButton,
-                                  const SizedBox(height: 20),
-                                  event_title_Field,
-                                  const SizedBox(height: 20),
-                                  venue_field,
-                                  const SizedBox(height: 20),
-                                  datetimepicker,
-                                  const SizedBox(height: 20),
-                                  description_field,
-                                  const SizedBox(height: 20),
-                                  submitBtn,
-
-                                ]
-                            )
-                        ),
-                      )
-
-                  )
+        body: GradientBackground(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color.fromARGB(255, 240, 239, 239)
+                      .withOpacity(0.5)),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                    child: Text(
+                      'Add a event',
+                      style: TextStyle(fontSize: 26),
+                    ),
+                  ),
+                  Center(
+                    child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: const Color.fromARGB(255, 240, 239, 239)
+                                      .withOpacity(0.7)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(25.0),
+                                child: Form(
+                                    key: _event_formKey,
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          imagePickerButton,
+                                          const SizedBox(height: 20),
+                                          event_title_Field,
+                                          const SizedBox(height: 20),
+                                          venue_field,
+                                          const SizedBox(height: 20),
+                                          datetimepicker,
+                                          const SizedBox(height: 20),
+                                          description_field,
+                                          const SizedBox(height: 20),
+                                          submitBtn,
+                                        ])),
+                              )),
+                        )),
+                  ),
+                ],
               ),
             ),
-          ],
-        )
-    );
+          ),
+        ));
   }
 
   //functions
-  void submitData()async{
-    if(_event_formKey.currentState!.validate()){
-      await uploadFile().then((value){
+  void submitData() async {
+    if (_event_formKey.currentState!.validate()) {
+      await uploadFile().then((value) {
         saveDatatoFirestore();
       });
     }
-
   }
 
-
-
-  saveDatatoFirestore() async{
+  saveDatatoFirestore() async {
     //initializinn firestore
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
@@ -419,12 +426,8 @@ class _add_Event_screenState extends State<add_Event_screen> {
     eventModel.date_time = '$_date at $_time';
     eventModel.image_path = uploadedImgUrl;
 
-
     await firebaseFirestore.collection('events').doc().set(eventModel.toMap());
     Fluttertoast.showToast(msg: "Event added successfully");
     Navigator.pop(context);
   }
-
 }
-
-

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sliit_info_ctse/model/user_model.dart';
 import 'package:sliit_info_ctse/services/auth_service.dart';
-
+import 'package:sliit_info_ctse/widgets/gradient_background.dart';
 
 class SignUp_Screen extends StatefulWidget {
   const SignUp_Screen({Key? key}) : super(key: key);
@@ -18,17 +17,15 @@ class SignUp_Screen extends StatefulWidget {
 }
 
 class _SignUp_ScreenState extends State<SignUp_Screen> {
-
   //picked image file
   PlatformFile? pickedFile;
   late String uploadedImgUrl;
-
 
   //authservice
   final AuthService _auth = AuthService();
 
   //account types
-  final accTypes = ['Lecturer','Student'];
+  final accTypes = ['Lecturer', 'Student'];
 
   //text editor controllers
   final f_name_editing_cntrlr = new TextEditingController();
@@ -44,32 +41,33 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
   final _signup_formKey = GlobalKey<FormState>();
 
   //menu item
-  DropdownMenuItem<String> buildMenuItem(String item) =>
-      DropdownMenuItem(value: item, child: Text(
-        item,
-        style: const TextStyle(fontSize: 16),
-      ),);
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: const TextStyle(fontSize: 16),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
-
     //firstname field
     final fNameField = TextFormField(
       autofocus: false,
       controller: f_name_editing_cntrlr,
       keyboardType: TextInputType.text,
       //field validation
-      validator: (val){
+      validator: (val) {
         RegExp regex = new RegExp(r'^.{3,}$');
-        if(val!.isEmpty){
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
-        if(!regex.hasMatch(val)){
+        if (!regex.hasMatch(val)) {
           return ("minimum length is 3 characters");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         f_name_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -79,8 +77,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
           hintText: "First name",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //image picker button viewer
@@ -95,9 +92,12 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
             ),
             Expanded(
               flex: 2,
-              child:  RawMaterialButton(
+              child: RawMaterialButton(
                 fillColor: Theme.of(context).colorScheme.secondary,
-                child: const FaIcon(FontAwesomeIcons.photoFilm, color: Colors.white,),
+                child: const FaIcon(
+                  FontAwesomeIcons.photoFilm,
+                  color: Colors.white,
+                ),
                 elevation: 2,
                 onPressed: () {
                   getImage();
@@ -106,7 +106,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                 shape: const CircleBorder(),
               ),
             ),
-            if(pickedFile != null)
+            if (pickedFile != null)
               Expanded(
                 flex: 6,
                 child: Container(
@@ -134,13 +134,13 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       controller: l_name_editing_cntrlr,
       keyboardType: TextInputType.text,
       //field validation
-      validator: (val){
-        if(val!.isEmpty){
+      validator: (val) {
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         l_name_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -150,15 +150,14 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
           hintText: "Last name",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //account type field
     final accTypeField = Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 0.8),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(width: 0.8),
       ),
       padding: const EdgeInsets.fromLTRB(20, 1, 20, 1),
       child: DropdownButtonFormField<String>(
@@ -166,7 +165,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
         isExpanded: true,
         hint: const Text('Select Account type'),
         items: accTypes.map(buildMenuItem).toList(),
-        onChanged: (value) => setState(()=> this.accType = value),
+        onChanged: (value) => setState(() => this.accType = value),
       ),
     );
 
@@ -176,16 +175,16 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       controller: email_editing_cntrlr,
       keyboardType: TextInputType.emailAddress,
       //email field validation
-      validator: (val){
-        if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val!)){
+      validator: (val) {
+        if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val!)) {
           return ("Please enter a valid username");
         }
-        if (val.isEmpty){
+        if (val.isEmpty) {
           return ("Please enter your username");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         email_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -195,8 +194,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
           hintText: "Email address",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //password field
@@ -205,17 +203,17 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       controller: pwd_editing_cntrlr,
       obscureText: true,
       //field validation
-      validator: (val){
+      validator: (val) {
         RegExp regex = new RegExp(r'^.{6,}$');
-        if(val!.isEmpty){
+        if (val!.isEmpty) {
           return ("field cannot be empty");
         }
-        if(!regex.hasMatch(val)){
+        if (!regex.hasMatch(val)) {
           return ("minimum length is 6 characters");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         pwd_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.next,
@@ -225,8 +223,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
           hintText: "Password",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
     //re-enter password field
@@ -235,14 +232,13 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       controller: confirm_pwd_editing_cntrlr,
       obscureText: true,
       //field validation
-      validator: (val){
-
-        if(confirm_pwd_editing_cntrlr.text != pwd_editing_cntrlr.text){
+      validator: (val) {
+        if (confirm_pwd_editing_cntrlr.text != pwd_editing_cntrlr.text) {
           return ("passwords do not match");
         }
         return null;
       },
-      onSaved: (val){
+      onSaved: (val) {
         confirm_pwd_editing_cntrlr.text = val!;
       },
       textInputAction: TextInputAction.done,
@@ -252,39 +248,45 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
           hintText: "Confirm Password",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )
-      ),
+          )),
     );
 
-
     //signup button
-        final signUpBtn = Material(
-            elevation : 5,
-            borderRadius: BorderRadius.circular(25),
-            color: Colors.orange,
-            child: MaterialButton(
-                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                onPressed: () async{
-                  _auth.signUp(email: email_editing_cntrlr.text, password: pwd_editing_cntrlr.text).then((value) async {
-                    if(value == null){
-                      await uploadFile().then((value){
-                        saveDatatoFirestore();
-                      });
-                    }else{
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(value, style: const TextStyle(fontSize: 16),),
-                      ));
-                    }
+    final signUpBtn = Material(
+        elevation: 5,
+        borderRadius: BorderRadius.circular(25),
+        color: Colors.orange,
+        child: MaterialButton(
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            onPressed: () async {
+              _auth
+                  .signUp(
+                      email: email_editing_cntrlr.text,
+                      password: pwd_editing_cntrlr.text)
+                  .then((value) async {
+                if (value == null) {
+                  await uploadFile().then((value) {
+                    saveDatatoFirestore();
                   });
-
-                },
-                minWidth: MediaQuery.of(context).size.width,
-                child:const Text("Register", textAlign: TextAlign.center,style: TextStyle(
-                    fontSize: 15, color: Colors.white, fontWeight: FontWeight.bold
-                ),)
-            )
-        );
-
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                      value,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ));
+                }
+              });
+            },
+            minWidth: MediaQuery.of(context).size.width,
+            child: const Text(
+              "Register",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            )));
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -292,65 +294,80 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color:Colors.orange),
-            onPressed: (){
+            icon: const Icon(Icons.arrow_back, color: Colors.orange),
+            onPressed: () {
               Navigator.of(context).pop();
             },
           ),
         ),
-        resizeToAvoidBottomInset : false,
-        body: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-              child: Text('Create a new account',
-                style: TextStyle(fontSize: 26),),
-            ),
-            const SizedBox(height: 10,),
-            Center(
-                  child: SingleChildScrollView(
-                    child: Container(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(25.0),
-                          child: Form(
-                              key: _signup_formKey,
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    imagePickerButton,
-                                    const SizedBox(height: 20),
-                                    fNameField,
-                                    const SizedBox(height: 20),
-                                    lNameField,
-                                    const SizedBox(height: 20),
-                                    accTypeField,
-                                    const SizedBox(height: 20),
-                                    username_field,
-                                    const SizedBox(height: 20),
-                                    pwd_field,
-                                    const SizedBox(height: 20),
-                                    confirm_pwd_field,
-                                    const SizedBox(height: 20),
-                                    signUpBtn,
-
-                                  ]
-                              )
-                          ),
-                        )
-
+        resizeToAvoidBottomInset: false,
+        body: GradientBackground(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: const Color.fromARGB(255, 240, 239, 239)
+                      .withOpacity(0.5)),
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                    child: Text(
+                      'Create a new account',
+                      style: TextStyle(fontSize: 26),
                     ),
-                  )
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                      child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: const Color.fromARGB(255, 240, 239, 239)
+                                  .withOpacity(0.7)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(25.0),
+                            child: Form(
+                                key: _signup_formKey,
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      imagePickerButton,
+                                      const SizedBox(height: 20),
+                                      fNameField,
+                                      const SizedBox(height: 20),
+                                      lNameField,
+                                      const SizedBox(height: 20),
+                                      accTypeField,
+                                      const SizedBox(height: 20),
+                                      username_field,
+                                      const SizedBox(height: 20),
+                                      pwd_field,
+                                      const SizedBox(height: 20),
+                                      confirm_pwd_field,
+                                      const SizedBox(height: 20),
+                                      signUpBtn,
+                                    ])),
+                          )),
+                    ),
+                  )),
+                ],
               ),
-          ],
-        )
-    );
+            ),
+          ),
+        ));
   }
 
   //functions
 
-  saveDatatoFirestore() async{
+  saveDatatoFirestore() async {
     //initializinn firestore
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     user_model userModel = user_model();
@@ -362,8 +379,11 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
     userModel.l_name = l_name_editing_cntrlr.text;
     userModel.acc_type = accType;
     userModel.imagePath = uploadedImgUrl;
-    
-    await firebaseFirestore.collection("users").doc(_auth.currentUser!.uid).set(userModel.toMap());
+
+    await firebaseFirestore
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Profile created successfully");
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
@@ -371,14 +391,14 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
   // File Picker select image
   Future getImage() async {
     final result = await FilePicker.platform.pickFiles();
-    if(result == null) return;
+    if (result == null) return;
     setState(() {
       pickedFile = result.files.first;
     });
   }
 
   //upload to the firebase storage
-  Future uploadFile() async{
+  Future uploadFile() async {
     final path = 'uploads/${pickedFile!.name}';
     final file = File(pickedFile!.path!);
 
@@ -392,9 +412,4 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
       uploadedImgUrl = urlDownload;
     });
   }
-
-
-
 }
-
-    
