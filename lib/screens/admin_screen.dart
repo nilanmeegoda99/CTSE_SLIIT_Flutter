@@ -17,6 +17,7 @@ class _AdminScreenState extends State<AdminScreen> {
     "News Info Configuration",
     "Staff Configuration",
     "Student Configuration",
+    "Inquary Configuration",
   ];
 
   List<String> configsLinks = [
@@ -25,6 +26,7 @@ class _AdminScreenState extends State<AdminScreen> {
     '/newsList',
     '/staffList',
     '/studentList',
+    '/inquaryAdminList',
   ];
 
   @override
