@@ -155,65 +155,65 @@ class _Login_ScreenState extends State<Login_Screen> {
           child: Center(
             child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: const Color.fromARGB(255, 240, 239, 239)
-                              .withOpacity(0.6)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Form(
-                            key: formKey,
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(
-                                      height: 200,
-                                      child: Expanded(
-                                        child: Image.asset(
-                                          "assets/images/sliit_logo.png",
-                                          fit: BoxFit.contain,
-                                        ),
-                                      )),
-                                  const SizedBox(height: 50),
-                                  username_field,
-                                  const SizedBox(height: 20),
-                                  pwd_field,
-                                  const SizedBox(height: 40),
-                                  guestViewBtn,
-                                  const SizedBox(height: 20),
-                                  signInBtn,
-                                  const SizedBox(height: 20),
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: const Color.fromARGB(255, 240, 239, 239)
+                          .withOpacity(0.6)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Form(
+                        key: formKey,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                  height: 200,
+                                  child: Expanded(
+                                    child: Image.asset(
+                                      "assets/images/SLIIT.png",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  )),
+                              const SizedBox(height: 50),
+                              username_field,
+                              const SizedBox(height: 20),
+                              pwd_field,
+                              const SizedBox(height: 40),
+                              guestViewBtn,
+                              const SizedBox(height: 20),
+                              signInBtn,
+                              const SizedBox(height: 20),
 
-                                  //account creation navigation
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      const Text("Don't have an account? "),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const SignUp_Screen()),
-                                          );
-                                        },
-                                        child: const Text(
-                                          "SignUp",
-                                          style: TextStyle(
-                                              color: Colors.orange,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ],
+                              //account creation navigation
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  const Text("Don't have an account? "),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SignUp_Screen()),
+                                      );
+                                    },
+                                    child: const Text(
+                                      "SignUp",
+                                      style: TextStyle(
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 15),
+                                    ),
                                   ),
-                                ])),
-                      )),
-                )),
+                                ],
+                              ),
+                            ])),
+                  )),
+            )),
           ),
         ));
   }

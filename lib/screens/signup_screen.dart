@@ -300,65 +300,68 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
             },
           ),
         ),
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         body: GradientBackground(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 240, 239, 239)
-                      .withOpacity(0.5)),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-                    child: Text(
-                      'Create a new account',
-                      style: TextStyle(fontSize: 26),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: const Color.fromARGB(255, 240, 239, 239)
+                        .withOpacity(0.5)),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                      child: Text(
+                        'Create a new account',
+                        style: TextStyle(fontSize: 26),
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                      child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: const Color.fromARGB(255, 240, 239, 239)
-                                  .withOpacity(0.7)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(25.0),
-                            child: Form(
-                                key: _signup_formKey,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      imagePickerButton,
-                                      const SizedBox(height: 20),
-                                      fNameField,
-                                      const SizedBox(height: 20),
-                                      lNameField,
-                                      const SizedBox(height: 20),
-                                      accTypeField,
-                                      const SizedBox(height: 20),
-                                      username_field,
-                                      const SizedBox(height: 20),
-                                      pwd_field,
-                                      const SizedBox(height: 20),
-                                      confirm_pwd_field,
-                                      const SizedBox(height: 20),
-                                      signUpBtn,
-                                    ])),
-                          )),
+                    const SizedBox(
+                      height: 10,
                     ),
-                  )),
-                ],
+                    Center(
+                        child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: const Color.fromARGB(255, 240, 239, 239)
+                                    .withOpacity(0.7)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(25.0),
+                              child: Form(
+                                  key: _signup_formKey,
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        imagePickerButton,
+                                        const SizedBox(height: 20),
+                                        fNameField,
+                                        const SizedBox(height: 20),
+                                        lNameField,
+                                        const SizedBox(height: 20),
+                                        accTypeField,
+                                        const SizedBox(height: 20),
+                                        username_field,
+                                        const SizedBox(height: 20),
+                                        pwd_field,
+                                        const SizedBox(height: 20),
+                                        confirm_pwd_field,
+                                        const SizedBox(height: 20),
+                                        signUpBtn,
+                                      ])),
+                            )),
+                      ),
+                    )),
+                  ],
+                ),
               ),
             ),
           ),

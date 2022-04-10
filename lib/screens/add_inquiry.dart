@@ -146,53 +146,55 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
         backgroundColor: Colors.white,
         appBar: buildLoggedAppBar(context),
         body: GradientBackground(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 240, 239, 239)
-                      .withOpacity(0.5)),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-                    child: Text(
-                      'Add a enquiry',
-                      style: TextStyle(fontSize: 26),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: const Color.fromARGB(255, 240, 239, 239)
+                        .withOpacity(0.5)),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                      child: Text(
+                        'Add a enquiry',
+                        style: TextStyle(fontSize: 26),
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: const Color.fromARGB(255, 240, 239, 239)
-                                      .withOpacity(0.7)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(25.0),
-                                child: Form(
-                                    key: _inquiry_formKey,
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          studentName_Field,
-                                          const SizedBox(height: 20),
-                                          contactNo_field,
-                                          const SizedBox(height: 20),
-                                          inquiryDesc_field,
-                                          const SizedBox(height: 40),
-                                          submitBtn,
-                                        ])),
-                              )),
-                        )),
-                  ),
-                ],
+                    Center(
+                      child: SingleChildScrollView(
+                          child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: const Color.fromARGB(255, 240, 239, 239)
+                                    .withOpacity(0.7)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(25.0),
+                              child: Form(
+                                  key: _inquiry_formKey,
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        studentName_Field,
+                                        const SizedBox(height: 20),
+                                        contactNo_field,
+                                        const SizedBox(height: 20),
+                                        inquiryDesc_field,
+                                        const SizedBox(height: 40),
+                                        submitBtn,
+                                      ])),
+                            )),
+                      )),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

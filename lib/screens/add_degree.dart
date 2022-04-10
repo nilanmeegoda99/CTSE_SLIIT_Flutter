@@ -210,58 +210,61 @@ class _add_Degree_screenState extends State<add_Degree_screen> {
         backgroundColor: Colors.white,
         appBar: buildLoggedAppBar(context),
         body: GradientBackground(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 240, 239, 239)
-                      .withOpacity(0.5)),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-                    child: Text(
-                      'Add a Degree',
-                      style: TextStyle(fontSize: 26),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: const Color.fromARGB(255, 240, 239, 239)
+                        .withOpacity(0.5)),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                      child: Text(
+                        'Add a Degree',
+                        style: TextStyle(fontSize: 26),
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: SingleChildScrollView(
-                        child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: const Color.fromARGB(255, 240, 239, 239)
-                                  .withOpacity(0.7)),
-                          // color: Colors.white,
+                    Center(
+                      child: SingleChildScrollView(
                           child: Padding(
-                            padding: const EdgeInsets.all(25.0),
-                            child: Form(
-                                key: _degree_formKey,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      const SizedBox(height: 50),
-                                      degree_titlt_Field,
-                                      const SizedBox(height: 20),
-                                      entry_req_field,
-                                      const SizedBox(height: 20),
-                                      faculty_TypeField,
-                                      const SizedBox(height: 20),
-                                      duration_field,
-                                      const SizedBox(height: 20),
-                                      description_field,
-                                      const SizedBox(height: 40),
-                                      submitBtn,
-                                    ])),
-                          )),
-                    )),
-                  ),
-                ],
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: const Color.fromARGB(255, 240, 239, 239)
+                                    .withOpacity(0.7)),
+                            // color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(25.0),
+                              child: Form(
+                                  key: _degree_formKey,
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        const SizedBox(height: 50),
+                                        degree_titlt_Field,
+                                        const SizedBox(height: 20),
+                                        entry_req_field,
+                                        const SizedBox(height: 20),
+                                        faculty_TypeField,
+                                        const SizedBox(height: 20),
+                                        duration_field,
+                                        const SizedBox(height: 20),
+                                        description_field,
+                                        const SizedBox(height: 40),
+                                        submitBtn,
+                                      ])),
+                            )),
+                      )),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

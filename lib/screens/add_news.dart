@@ -115,7 +115,7 @@ class _add_News_screenState extends State<add_News_screen> {
                       child: Image.file(
                         File(pickedFile!.path!),
                         width: 400,
-                        height: 150,
+                        // height: 150,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -185,52 +185,55 @@ class _add_News_screenState extends State<add_News_screen> {
         backgroundColor: Colors.white,
         appBar: buildLoggedAppBar(context),
         body: GradientBackground(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: const Color.fromARGB(255, 240, 239, 239)
-                      .withOpacity(0.5)),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
-                    child: Text(
-                      'Add a news',
-                      style: TextStyle(fontSize: 26),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: const Color.fromARGB(255, 240, 239, 239)
+                        .withOpacity(0.5)),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(1, 5, 1, 5),
+                      child: Text(
+                        'Add a news',
+                        style: TextStyle(fontSize: 26),
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: SingleChildScrollView(
-                        child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: const Color.fromARGB(255, 240, 239, 239)
-                                  .withOpacity(0.7)),
+                    Center(
+                      child: SingleChildScrollView(
                           child: Padding(
-                            padding: const EdgeInsets.all(25.0),
-                            child: Form(
-                                key: _news_formKey,
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      imagePickerButton,
-                                      const SizedBox(height: 30),
-                                      news_title_Field,
-                                      const SizedBox(height: 20),
-                                      description_field,
-                                      const SizedBox(height: 40),
-                                      submitBtn,
-                                    ])),
-                          )),
-                    )),
-                  ),
-                ],
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: const Color.fromARGB(255, 240, 239, 239)
+                                    .withOpacity(0.7)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(25.0),
+                              child: Form(
+                                  key: _news_formKey,
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        imagePickerButton,
+                                        const SizedBox(height: 30),
+                                        news_title_Field,
+                                        const SizedBox(height: 20),
+                                        description_field,
+                                        const SizedBox(height: 40),
+                                        submitBtn,
+                                      ])),
+                            )),
+                      )),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
