@@ -7,6 +7,7 @@ import 'package:sliit_info_ctse/screens/degree_list.dart';
 import 'package:sliit_info_ctse/screens/edit_prodile.dart';
 import 'package:sliit_info_ctse/screens/events_list.dart';
 import 'package:sliit_info_ctse/screens/home_screen.dart';
+import 'package:sliit_info_ctse/screens/inquary_admin_list.dart';
 import 'package:sliit_info_ctse/screens/inquiries_list.dart';
 import 'package:sliit_info_ctse/screens/login_screen.dart';
 import 'package:sliit_info_ctse/screens/news_list.dart';
@@ -17,8 +18,6 @@ import 'package:sliit_info_ctse/screens/userProfile.dart';
 
 import 'screens/add_event.dart';
 import 'screens/add_inquiry.dart';
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,24 +37,25 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-     initialRoute: '/',
+      initialRoute: '/',
       routes: {
         '/': (context) => const Login_Screen(),
         '/signup': (context) => const SignUp_Screen(),
         '/home': (context) => const HomeScreen(),
         '/userprofile': (context) => ProfilePage(),
-        '/edit_profile' : (context) => EditProfilePage(),
+        '/edit_profile': (context) => EditProfilePage(),
         '/add_degree': (context) => const add_Degree_screen(),
         '/add_event': (context) => const add_Event_screen(),
         '/add_news': (context) => const add_News_screen(),
-        '/admin': (context) => const  AdminScreen(),
-        '/degreeList': (context) => const  degreeList(),
-        '/eventList': (context) => const  eventList(),
-        '/newsList' : (context) => const newsList(),
-        '/staffList' : (context) => const staffList(),
-        '/studentList' : (context) => const studentList(),
-        '/add_inquiry' : (context) => const add_InquiryScreen(),
-        '/inquiries' : (context) => const inquiryList(),
+        '/admin': (context) => const AdminScreen(),
+        '/degreeList': (context) => const degreeList(),
+        '/eventList': (context) => const eventList(),
+        '/newsList': (context) => const newsList(),
+        '/staffList': (context) => const staffList(),
+        '/studentList': (context) => const studentList(),
+        '/add_inquiry': (context) => const add_InquiryScreen(),
+        '/inquiries': (context) => const inquiryList(),
+        '/inquaryAdminList': (context) => const InquaryAdmin(),
       },
     );
   }

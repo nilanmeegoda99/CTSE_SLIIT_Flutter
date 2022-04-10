@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:sliit_info_ctse/widgets/gradient_background.dart';
 import '../widgets/loggedAppBar.dart';
 
-class inquiryList extends StatefulWidget {
-  const inquiryList({Key? key}) : super(key: key);
+class InquaryAdmin extends StatefulWidget {
+  const InquaryAdmin({Key? key}) : super(key: key);
 
   @override
-  State<inquiryList> createState() => _inquiryListState();
+  State<InquaryAdmin> createState() => _InquaryAdminState();
 }
 
-class _inquiryListState extends State<inquiryList> {
+class _InquaryAdminState extends State<InquaryAdmin> {
   //collection reference
   final CollectionReference _inquiries =
       FirebaseFirestore.instance.collection('inquiries');
@@ -40,7 +40,7 @@ class _inquiryListState extends State<inquiryList> {
                   height: 20,
                 ),
                 Expanded(
-                  child: StreamBuilder(
+                  child: StreamBuilder<QuerySnapshot>(
                     stream: _inquiries.snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
@@ -57,7 +57,7 @@ class _inquiryListState extends State<inquiryList> {
                                     side: const BorderSide(
                                         color: Colors.transparent),
                                     borderRadius: BorderRadius.circular(5)),
-                                margin: const EdgeInsets.all(12),
+                                margin: const EdgeInsets.all(10),
                                 child: ListTile(
                                   // tileColor: Colors.white70,
                                   title: Text(
@@ -65,33 +65,22 @@ class _inquiryListState extends State<inquiryList> {
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  subtitle: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(2, 5, 2, 5),
-                                    child:
-                                        Text(documentSnapshot['inquiryDesc']),
-                                  ),
-                                  leading: const CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                          'assets/images/enquiry-icon.png')),
+                                  subtitle:
+                                      Text(documentSnapshot['inquiryDesc']),
+                                  // leading: CircleAvatar(
+                                  //     backgroundImage: NetworkImage(
+                                  //         '${documentSnapshot['imagePath']}')),
                                   trailing: SizedBox(
                                     width: 100,
                                     child: Row(
                                       children: [
                                         IconButton(
                                             icon: const Icon(
-                                              Icons.edit,
-                                              color: Color.fromARGB(
-                                                  255, 22, 63, 24),
-                                            ),
-                                            onPressed: () {}),
-                                        IconButton(
-                                            icon: const Icon(
                                               Icons.delete,
                                               color: Colors.red,
                                             ),
                                             onPressed: () {
-                                              _deleteDegree(
+                                              _deleteInquary(
                                                   documentSnapshot.id);
                                             }),
                                       ],
@@ -112,26 +101,14 @@ class _inquiryListState extends State<inquiryList> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // print(currentUser.acc_type);
-          Navigator.pushNamed(context, '/add_inquiry');
-          // Add your onPressed code here!
-        },
-        backgroundColor: const Color(0xff002F66),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
     );
   }
 
   //delete function
-  Future<void> _deleteDegree(String degreeId) async {
-    await _inquiries.doc(degreeId).delete();
+  Future<void> _deleteInquary(String userId) async {
+    await _inquiries.doc(userId).delete();
 
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You have successfully deleted a Inquiry')));
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('User has been deleted successfully!')));
   }
 }
