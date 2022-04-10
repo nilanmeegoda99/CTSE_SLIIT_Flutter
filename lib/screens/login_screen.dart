@@ -171,9 +171,11 @@ class _Login_ScreenState extends State<Login_Screen> {
                                 children: <Widget>[
                                   SizedBox(
                                       height: 200,
-                                      child: Image.asset(
-                                        "assets/images/z_p01-SLIIT.jpg",
-                                        fit: BoxFit.contain,
+                                      child: Expanded(
+                                        child: Image.asset(
+                                          "assets/images/sliit_logo.png",
+                                          fit: BoxFit.contain,
+                                        ),
                                       )),
                                   const SizedBox(height: 50),
                                   username_field,

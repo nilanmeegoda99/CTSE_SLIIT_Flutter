@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sliit_info_ctse/widgets/gradient_background.dart';
@@ -14,6 +16,12 @@ class _inquiryListState extends State<inquiryList> {
   //collection reference
   final CollectionReference _inquiries =
       FirebaseFirestore.instance.collection('inquiries');
+
+  //text editor controllers
+  final name_editing_cntrlr = TextEditingController();
+  final contactNo_editing_cntrlr = TextEditingController();
+  final inquiry_editing_cntrlr = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +92,9 @@ class _inquiryListState extends State<inquiryList> {
                                               color: Color.fromARGB(
                                                   255, 22, 63, 24),
                                             ),
-                                            onPressed: () {}),
+                                            onPressed: () {
+                                              _updateInquiry(documentSnapshot);
+                                            }),
                                         IconButton(
                                             icon: const Icon(
                                               Icons.delete,
@@ -133,5 +143,83 @@ class _inquiryListState extends State<inquiryList> {
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('You have successfully deleted a Inquiry')));
+  }
+
+  //update function
+  Future<void> _updateInquiry([DocumentSnapshot? documentSnapshot]) async {
+    String action = 'create';
+    if (documentSnapshot != null) {
+      action = 'update';
+      name_editing_cntrlr.text = documentSnapshot['name'].toString();
+      contactNo_editing_cntrlr.text = documentSnapshot['contactNo'].toString();
+      inquiry_editing_cntrlr.text = documentSnapshot['inquiryDesc'].toString();
+    }
+
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: name_editing_cntrlr,
+                  decoration: const InputDecoration(
+                    labelText: 'Your Name',
+                  ),
+                ),
+                TextField(
+                  controller: contactNo_editing_cntrlr,
+                  decoration: const InputDecoration(
+                    labelText: 'Contact No',
+                  ),
+                ),
+                TextField(
+                  controller: inquiry_editing_cntrlr,
+                  minLines: 1,
+                  maxLines: 8,
+                  keyboardType: TextInputType.multiline,
+                  decoration: const InputDecoration(labelText: 'Your Inquiry'),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  child: const Text('Update', style: TextStyle(color: Colors.white),),
+                  onPressed: () async {
+                    final String? titleInq = name_editing_cntrlr.text;
+                    final String? contactNo = contactNo_editing_cntrlr.text;
+                    final String? descriptionInquiry = inquiry_editing_cntrlr.text;
+
+                    if (titleInq != null) {
+                      if (action == 'update') {
+                        await _inquiries.doc(documentSnapshot!.id).update({
+                          "name": titleInq,
+                          "contactNo": contactNo,
+                          "inquiryDesc": descriptionInquiry,
+                        });
+                      }
+
+                      name_editing_cntrlr.text = '';
+                      contactNo_editing_cntrlr.text = '';
+                      inquiry_editing_cntrlr.text = '';
+
+                      Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Updated Successfully')));
+                    }
+                  },
+                )
+              ],
+            ),
+          );
+        });
   }
 }
