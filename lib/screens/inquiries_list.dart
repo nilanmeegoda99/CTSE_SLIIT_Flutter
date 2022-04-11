@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sliit_info_ctse/services/auth_service.dart';
 import 'package:sliit_info_ctse/widgets/gradient_background.dart';
 import '../widgets/loggedAppBar.dart';
 
@@ -13,6 +14,10 @@ class inquiryList extends StatefulWidget {
 }
 
 class _inquiryListState extends State<inquiryList> {
+
+  //authservice
+  final AuthService _auth = AuthService();
+
   //collection reference
   final CollectionReference _inquiries =
       FirebaseFirestore.instance.collection('inquiries');
@@ -23,8 +28,11 @@ class _inquiryListState extends State<inquiryList> {
   final inquiry_editing_cntrlr = TextEditingController();
 
 
+
   @override
   Widget build(BuildContext context) {
+    final currentUser_uid = _auth.currentUser!.uid.toString();
+
     return Scaffold(
       appBar: buildLoggedAppBar(context),
       body: GradientBackground(
@@ -48,8 +56,10 @@ class _inquiryListState extends State<inquiryList> {
                   height: 20,
                 ),
                 Expanded(
-                  child: StreamBuilder(
-                    stream: _inquiries.snapshots(),
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _inquiries
+                        .where('createdBy', isEqualTo: currentUser_uid)
+                        .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
@@ -148,6 +158,7 @@ class _inquiryListState extends State<inquiryList> {
   //update function
   Future<void> _updateInquiry([DocumentSnapshot? documentSnapshot]) async {
     String action = 'create';
+    final currentUser_uid = _auth.currentUser!.uid.toString();
     if (documentSnapshot != null) {
       action = 'update';
       name_editing_cntrlr.text = documentSnapshot['name'].toString();
@@ -204,6 +215,7 @@ class _inquiryListState extends State<inquiryList> {
                           "name": titleInq,
                           "contactNo": contactNo,
                           "inquiryDesc": descriptionInquiry,
+                          "createdBy": currentUser_uid,
                         });
                       }
 

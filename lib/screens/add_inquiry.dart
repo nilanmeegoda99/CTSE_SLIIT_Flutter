@@ -219,6 +219,7 @@ class _add_InquiryScreenState extends State<add_InquiryScreen> {
     inquiryModel.email = _authService.currentUser?.email;
     inquiryModel.contactNo = contactNo_editing_cntrlr.text;
     inquiryModel.inquiryDesc = inquiry_editing_cntrlr.text;
+    inquiryModel.createdBy = _authService.currentUser?.uid.toString();
 
     await firebaseFirestore
         .collection('inquiries')

@@ -5,6 +5,7 @@ class inquiry_model{
   String? email;
   String? contactNo;
   String? inquiryDesc;
+  String? createdBy;
 
 
   inquiry_model({
@@ -12,6 +13,7 @@ class inquiry_model{
     this.email,
     this.contactNo,
     this.inquiryDesc,
+    this.createdBy,
 
   });
 
@@ -22,6 +24,7 @@ class inquiry_model{
       'email': email,
       'contactNo': contactNo,
       'inquiryDesc': inquiryDesc,
+      'createdBy': createdBy,
 
     };
   }
@@ -31,6 +34,7 @@ class inquiry_model{
         name = snapshot.data()['name'],
         email = snapshot.data()['email'],
         contactNo = snapshot.data()['contactNo'],
-        inquiryDesc = snapshot.data()['inquiryDesc'];
+        inquiryDesc = snapshot.data()['inquiryDesc'],
+        createdBy = snapshot.data()['createdBy'];
 
 }
